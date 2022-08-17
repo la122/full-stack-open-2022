@@ -13,16 +13,26 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
 
+  const [votes, setVotes] = useState(new Uint32Array(anecdotes.length));
+
   const randomizeSelected = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
     console.log(random);
     setSelected(random);
   };
 
+  const doVote = () => {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+  };
+
   return (
     <div>
       <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
       <button onClick={randomizeSelected}>new anecdote</button>
+      <button onClick={doVote}>vote</button>
     </div>
   );
 };
