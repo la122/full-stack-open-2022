@@ -1,6 +1,33 @@
-import Header from "./Header";
-import Content from "./Content";
-import Total from "./Total";
+const Header = (props) => {
+  console.log(props);
+  return <h1>{props.course}</h1>;
+};
+
+const Content = (props) => {
+  console.log(props);
+  return (
+    <div>
+      <Part part={props.parts[0]} />
+      <Part part={props.parts[1]} />
+      <Part part={props.parts[2]} />
+    </div>
+  );
+};
+
+const Part = (props) => {
+  console.log(props);
+  return (
+    <p>
+      {props.part.name} {props.part.exercises}
+    </p>
+  );
+};
+
+const Total = (props) => {
+  console.log(props);
+  return <p>Number of exercises {props.count}</p>;
+};
+
 const App = () => {
   const course = {
     name: "Half Stack application development",
