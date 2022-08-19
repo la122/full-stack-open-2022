@@ -22,14 +22,19 @@ const Country = ({ country }) => (
   </>
 );
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, onShowButtonClick }) => {
   if (countries.length > 10) {
     return <div>Too many matches, specify another filter</div>;
   } else if (countries.length > 1) {
     return (
       <>
         {countries.map((country) => (
-          <div key={country.name.common}>{country.name.common}</div>
+          <div key={country.name.common}>
+            {country.name.common}{" "}
+            <button value={country.name.common} onClick={onShowButtonClick}>
+              show
+            </button>
+          </div>
         ))}
       </>
     );
@@ -44,12 +49,16 @@ const App = () => {
 
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all").then((response) => {
-      console.log("promise fulfilled");
       setCountries(response.data);
     });
   }, []);
 
   const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const handleShowButtonClicked = (event) => {
+    event.preventDefault();
     setFilter(event.target.value);
   };
 
@@ -62,7 +71,10 @@ const App = () => {
       <div>
         find countries <input onChange={handleFilterChange} />
       </div>
-      <CountryList countries={countriesFiltered} />
+      <CountryList
+        countries={countriesFiltered}
+        onShowButtonClick={handleShowButtonClicked}
+      />
     </div>
   );
 };
