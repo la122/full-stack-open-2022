@@ -11,6 +11,47 @@ const LanguageList = ({ languages }) => {
   );
 };
 
+const Weather = ({ latitude, longitude }) => {
+  const [weather, setWeather] = useState({
+    temperatur: "?",
+    windspeed: "?",
+    iconCode: "01d",
+  });
+
+  const api_key = process.env.REACT_APP_API_KEY;
+
+  useEffect(() => {
+    axios
+      .get("https://api.openweathermap.org/data/2.5/weather", {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: api_key,
+          units: "metric",
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        setWeather({
+          temperatur: data.main.LanguageListtemp,
+          windspeed: data.wind.speed,
+          iconCode: data.weather[0].icon,
+        });
+      });
+  }, [latitude, longitude, api_key]);
+
+  return (
+    <>
+      <div>tempature {weather.temperatur} Celsius</div>
+      <img
+        src={`http://openweathermap.org/img/wn/${weather.iconCode}@2x.png`}
+        alt="Weather icon"
+      ></img>
+      <div>wind {weather.windspeed} m/s</div>
+    </>
+  );
+};
+
 const Country = ({ country }) => (
   <>
     <h2>{country.name.common}</h2>
@@ -19,6 +60,9 @@ const Country = ({ country }) => (
     <h3>languages</h3>
     <LanguageList languages={Object.values(country.languages)} />
     <img src={country.flags.png} alt={`Flag of ${country.name.common}`} />
+
+    <h2>Weather in {country.capital}</h2>
+    <Weather latitude={country.latlng[0]} longitude={country.latlng[1]} />
   </>
 );
 
