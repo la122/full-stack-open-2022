@@ -47,10 +47,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setNewFilter] = useState("");
 
+  const baseUrl = "http://localhost:3001/persons";
+
   useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
+    axios.get(baseUrl).then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -75,6 +75,7 @@ const App = () => {
     if (persons.some((it) => it.name === newName)) {
       alert(`${newName} is already added to phonebook`);
     } else {
+      axios.post(baseUrl, newPerson);
       setPersons(persons.concat(newPerson));
     }
   };
