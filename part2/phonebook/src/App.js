@@ -24,19 +24,20 @@ const PersonForm = ({ onNameChange, onNumberChange, onButtonClicked }) => (
 );
 
 const PersonDetails = ({ name, number }) => (
-  <div>
+  <>
     {name} {number}
-  </div>
+  </>
 );
 
-const Persons = ({ persons }) => (
+const Persons = ({ persons, onDeleteClick }) => (
   <>
     {persons.map((person) => (
-      <PersonDetails
-        name={person.name}
-        number={person.number}
-        key={person.name}
-      />
+      <div key={person.id}>
+        <PersonDetails name={person.name} number={person.number} />{" "}
+        <button value={person.id} onClick={onDeleteClick}>
+          delete
+        </button>
+      </div>
     ))}
   </>
 );
@@ -79,6 +80,24 @@ const App = () => {
     }
   };
 
+  const deleteButtonClicked = (event) => {
+    event.preventDefault();
+    const id = event.target.value;
+    const person = persons.find((person) => person.id === +id); // cast id to string
+    if (window.confirm(`Delete ${person.name}?`)) {
+      deletePerson(id);
+    }
+  };
+
+  const deletePerson = (id) => {
+    personService.remove(id).then(() => {
+      const personsUpdated = persons.filter((person) => {
+        return person.id !== +id; // cast id to string
+      });
+      setPersons(personsUpdated);
+    });
+  };
+
   const personsToShow =
     filter.length > 0
       ? persons.filter((person) =>
@@ -99,7 +118,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} onDeleteClick={deleteButtonClicked} />
     </div>
   );
 };
