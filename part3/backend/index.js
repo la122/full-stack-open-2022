@@ -70,6 +70,25 @@ app.post("/api/persons", (request, response) => {
   const person = request.body;
   console.log("creating", person);
 
+  if (!person.name) {
+    return response.status(400).json({
+      error: "name missing",
+    });
+  }
+
+  if (!person.number) {
+    return response.status(400).json({
+      error: "number missing",
+    });
+  }
+
+  const found = persons.find((p) => p.name == person.name);
+  if (found) {
+    return response.status(400).json({
+      error: "name must be unique",
+    });
+  }
+
   const generateId = () => {
     let attemps = 0;
     while (attemps++ < 100) {
