@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
 
-const Notification = ({ message, color }) => {
+const Notification = ({ notification }) => {
   const [show, setShow] = useState(true);
+
+  const { message, color } = notification;
 
   useEffect(() => {
     setShow(true);
@@ -10,7 +12,7 @@ const Notification = ({ message, color }) => {
       setShow(false);
     }, 3000);
     return () => clearTimeout(timeout);
-  }, [message]);
+  }, [notification]);
 
   if (message === null || show === false) {
     return null;
@@ -168,7 +170,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification.message} color={notification.color} />
+      <Notification notification={notification} />
       <Filter onChange={handleFilterChange} />
 
       <h2>add a new</h2>
