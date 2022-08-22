@@ -1,5 +1,8 @@
 const express = require("express");
+
 const app = express();
+
+app.use(express.json());
 
 let persons = [
   {
@@ -61,4 +64,26 @@ app.delete("/api/persons/:id", (request, response) => {
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+app.post("/api/persons", (request, response) => {
+  const person = request.body;
+  console.log("creating", person);
+
+  const generateId = () => {
+    let attemps = 0;
+    while (attemps++ < 100) {
+      const id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+      if (!persons.some((p) => p.id === id)) {
+        return id;
+      }
+    }
+    throw "Could not generate unique id!";
+  };
+
+  person.id = generateId();
+
+  persons = persons.concat(person);
+
+  response.json(person);
 });
