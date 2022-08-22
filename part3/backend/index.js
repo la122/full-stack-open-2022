@@ -4,7 +4,23 @@ const morgan = require("morgan");
 const app = express();
 
 app.use(express.json());
-app.use(morgan("tiny"));
+
+app.use(
+  morgan("tiny", {
+    skip: (req, res) => req.method === "POST",
+  })
+);
+
+morgan.token("person", (req, res) => JSON.stringify(req.body));
+
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :person",
+    {
+      skip: (req, res) => req.method !== "POST",
+    }
+  )
+);
 
 let persons = [
   {
@@ -70,7 +86,6 @@ app.listen(PORT, () => {
 
 app.post("/api/persons", (request, response) => {
   const person = request.body;
-  console.log("creating", person);
 
   if (!person.name) {
     return response.status(400).json({
@@ -102,9 +117,8 @@ app.post("/api/persons", (request, response) => {
     throw "Could not generate unique id!";
   };
 
-  person.id = generateId();
+  const newPerson = { ...person, id: generateId() };
+  persons = persons.concat(newPerson);
 
-  persons = persons.concat(person);
-
-  response.json(person);
+  response.json(newPerson);
 });
