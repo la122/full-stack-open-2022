@@ -63,6 +63,14 @@ app.post("/api/persons", (request, response) => {
   });
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => console.log("delete failed", error));
+});
+
 // app.get("/", (request, response) => {
 //   response.send("<h1>Hello World!</h1>");
 // });
@@ -84,11 +92,4 @@ app.post("/api/persons", (request, response) => {
 //   } else {
 //     response.status(404).end();
 //   }
-// });
-
-// app.delete("/api/persons/:id", (request, response) => {
-//   const id = Number(request.params.id);
-//   persons = persons.filter((person) => person.id !== id);
-
-//   response.status(204).end();
 // });

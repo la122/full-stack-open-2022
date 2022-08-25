@@ -145,7 +145,8 @@ const App = () => {
   const deleteButtonClicked = (event) => {
     event.preventDefault();
     const id = event.target.value;
-    const person = persons.find((person) => person.id === +id);
+    console.log("deleting by id", id);
+    const person = persons.find((person) => person.id === id);
     if (window.confirm(`Delete ${person.name}?`)) {
       deletePerson(id);
     }
@@ -154,7 +155,7 @@ const App = () => {
   const deletePerson = (id) => {
     personService.remove(id).then(() => {
       const personsUpdated = persons.filter((person) => {
-        return person.id !== +id;
+        return person.id !== id;
       });
       setPersons(personsUpdated);
     });
