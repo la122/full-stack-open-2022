@@ -10,7 +10,7 @@ const Notification = ({ notification }) => {
     setShow(true);
     const timeout = setTimeout(() => {
       setShow(false);
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timeout);
   }, [notification]);
 
@@ -132,13 +132,21 @@ const App = () => {
           });
       }
     } else {
-      personService.create(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNotification({
-          message: `Added ${returnedPerson.name}`,
-          color: "green",
+      personService
+        .create(newPerson)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNotification({
+            message: `Added ${returnedPerson.name}`,
+            color: "green",
+          });
+        })
+        .catch((error) => {
+          setNotification({
+            message: error.response.data.error,
+            color: "red",
+          });
         });
-      });
     }
   };
 
