@@ -124,9 +124,12 @@ const App = () => {
               color: "green",
             });
           })
-          .catch(() => {
+          .catch((error) => {
+            const message = error.response?.data?.error;
             setNotification({
-              message: `Information of ${newPerson.name} has already been removed from server`,
+              message:
+                message ??
+                `Information of ${newPerson.name} has already been removed from server`,
               color: "red",
             });
           });
@@ -156,17 +159,29 @@ const App = () => {
     console.log("deleting by id", id);
     const person = persons.find((person) => person.id === id);
     if (window.confirm(`Delete ${person.name}?`)) {
-      deletePerson(id);
+      deletePerson(person);
     }
   };
 
-  const deletePerson = (id) => {
-    personService.remove(id).then(() => {
-      const personsUpdated = persons.filter((person) => {
-        return person.id !== id;
+  const deletePerson = ({ id, name }) => {
+    personService
+      .remove(id)
+      .then(() => {
+        const personsUpdated = persons.filter((person) => {
+          return person.id !== id;
+        });
+        setPersons(personsUpdated);
+      })
+      .catch((error) => {
+        const message = error.response?.data?.error;
+
+        setNotification({
+          message:
+            message ??
+            `Information of ${name} has already been removed from server`,
+          color: "red",
+        });
       });
-      setPersons(personsUpdated);
-    });
   };
 
   const personsToShow =
