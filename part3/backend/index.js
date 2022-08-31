@@ -11,17 +11,17 @@ app.use(express.static("build"));
 
 app.use(
   morgan("tiny", {
-    skip: (req, res) => req.method === "POST",
+    skip: (req) => req.method === "POST",
   })
 );
 
-morgan.token("person", (req, res) => JSON.stringify(req.body));
+morgan.token("person", (req) => JSON.stringify(req.body));
 
 app.use(
   morgan(
     ":method :url :status :res[content-length] - :response-time ms :person",
     {
-      skip: (req, res) => req.method !== "POST",
+      skip: (req) => req.method !== "POST",
     }
   )
 );
@@ -141,12 +141,15 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message);
 
   switch (error.name) {
-    case "CastError":
+    case "CastError": {
       return response.status(400).send({ error: "malformatted id" });
-    case "ValidationError":
+    }
+    case "ValidationError": {
       return response.status(400).json({ error: error.message });
-    default:
+    }
+    default: {
       next(error);
+    }
   }
 };
 
