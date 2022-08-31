@@ -13,11 +13,16 @@ mongoose
   });
 
 const personSchema = new mongoose.Schema({
-  name: { type: String, unique: true, minLength: 3, required: true },
+  name: {
+    type: String,
+    unique: true,
+    required: [true, "name missing"],
+    minLength: 3,
+  },
   number: {
     type: String,
+    required: [true, "number missing"],
     minLength: 8,
-    required: true,
     validate: {
       validator: (v) => {
         console.log("validating", v);
