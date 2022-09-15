@@ -98,6 +98,35 @@ describe("deleting blog posts", () => {
   });
 });
 
+describe("updating blog posts", () => {
+  const updateBlog = async (blogToUpdate) => {
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate);
+    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    const updatedBlog = blogsAtEnd.find((it) => it.id === blogToUpdate.id);
+    expect(updatedBlog).toEqual(blogToUpdate);
+  };
+
+  test("blog title can be updated", async () => {
+    const { body: blogsAtStart } = await api.get("/api/blogs");
+    await updateBlog({ ...blogsAtStart[0], title: "updated" });
+  });
+
+  test("blog author can be updated", async () => {
+    const { body: blogsAtStart } = await api.get("/api/blogs");
+    await updateBlog({ ...blogsAtStart[0], author: "updated" });
+  });
+
+  test("blog url can be updated", async () => {
+    const { body: blogsAtStart } = await api.get("/api/blogs");
+    await updateBlog({ ...blogsAtStart[0], url: "updated" });
+  });
+
+  test("blog likes can be updated", async () => {
+    const { body: blogsAtStart } = await api.get("/api/blogs");
+    await updateBlog({ ...blogsAtStart[0], likes: 9000 });
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
