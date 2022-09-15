@@ -42,18 +42,36 @@ test("a new blog post can be created", async () => {
   );
 });
 
-test("missing 'like' property will default to 0", async () => {
-  const newBlog = {
-    title: "New blog",
-    author: "Arto Hellas",
-    url: "www.new.blog",
-  };
+describe("missing properties", () => {
+  test("missing 'like' property will default to 0", async () => {
+    const newBlog = {
+      title: "New blog",
+      author: "Arto Hellas",
+      url: "www.new.blog",
+    };
 
-  await api.post("/api/blogs").send(newBlog);
+    await api.post("/api/blogs").send(newBlog);
 
-  const response = await api.get("/api/blogs");
-  const result = response.body.find((it) => it.title === newBlog.title);
-  expect(result.likes).toBe(0);
+    const response = await api.get("/api/blogs");
+    const result = response.body.find((it) => it.title === newBlog.title);
+    expect(result.likes).toBe(0);
+  });
+
+  test("missing 'title' property returns status code 400", async () => {
+    const newBlog = {
+      author: "Arto Hellas",
+      url: "www.new.blog",
+    };
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+
+  test("missing 'url' property returns status code 400", async () => {
+    const newBlog = {
+      title: "New blog",
+      author: "Arto Hellas",
+    };
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
 });
 
 afterAll(() => {
