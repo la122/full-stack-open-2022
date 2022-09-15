@@ -74,6 +74,30 @@ describe("missing properties", () => {
   });
 });
 
+describe("deleting blog posts", () => {
+  test("a blog post can be deleted", async () => {
+    const { body: blogsAtStart } = await api.get("/api/blogs");
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1);
+  });
+
+  test("deleting a non existing blog post (but valid id) fails and returns statuscode 404", async () => {
+    await api.delete("/api/blogs/5a422a851b54a676234d17f0").expect(404);
+    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+  });
+
+  test("deleting a blog post with invalid id fails and returns statuscode 400", async () => {
+    await api.delete("/api/blogs/0").expect(400);
+    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
