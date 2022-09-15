@@ -42,6 +42,20 @@ test("a new blog post can be created", async () => {
   );
 });
 
+test("missing 'like' property will default to 0", async () => {
+  const newBlog = {
+    title: "New blog",
+    author: "Arto Hellas",
+    url: "www.new.blog",
+  };
+
+  await api.post("/api/blogs").send(newBlog);
+
+  const response = await api.get("/api/blogs");
+  const result = response.body.find((it) => it.title === newBlog.title);
+  expect(result.likes).toBe(0);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
