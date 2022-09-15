@@ -17,6 +17,11 @@ test("returns the correct amount of blog posts in JSON format", async () => {
   expect(response.body).toHaveLength(initialBlogs.length);
 });
 
+test("blog posts has property 'id'", async () => {
+  const response = await api.get("/api/blogs");
+  expect(response.body[0].id).toBeDefined();
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
