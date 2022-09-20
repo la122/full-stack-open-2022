@@ -1,23 +1,14 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-
-const getUser = (token) => {
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!decodedToken.id) {
-    throw "token missing or invalid";
-  }
-  return User.findById(decodedToken.id);
-};
+const { userExtractor } = require("../utils/middleware");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
   response.json(blogs);
 });
 
-blogsRouter.post("/", async (request, response) => {
-  const user = await getUser(request.token);
+blogsRouter.post("/", userExtractor, async (request, response) => {
+  const user = await request.user;
 
   const blog = new Blog({ ...request.body, user: user._id });
   const savedBlog = await blog.save();
@@ -28,8 +19,8 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
-blogsRouter.delete("/:id", async (request, response) => {
-  const user = await getUser(request.token);
+blogsRouter.delete("/:id", userExtractor, async (request, response) => {
+  const user = request.user;
   const blog = await Blog.findById(request.params.id);
 
   if (blog === null) {
@@ -51,21 +42,38 @@ blogsRouter.delete("/:id", async (request, response) => {
   }
 });
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", userExtractor, async (request, response) => {
+  const user = request.user;
   const { title, author, url, likes } = request.body;
 
-  const blog = {
+  const blog = await Blog.findById(request.params.id);
+
+  if (blog === null) {
+    return response.status(404).end();
+  }
+
+  if (blog.user.toString() !== user.id.toString()) {
+    return response
+      .status(204)
+      .json({ error: "cannot update other user's blogs" });
+  }
+
+  const blogInfo = {
     title,
     author,
     url,
     likes,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
-    new: true,
-    runValidators: true,
-    context: "query",
-  });
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    blogInfo,
+    {
+      new: true,
+      runValidators: true,
+      context: "query",
+    }
+  );
 
   response.json(updatedBlog);
 });
