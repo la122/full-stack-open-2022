@@ -11,8 +11,12 @@ beforeEach(async () => {
 });
 
 test("returns the correct amount of blog posts in JSON format", async () => {
-  const response = await api.get("/api/blogs");
-  expect(response.body).toHaveLength(initialBlogs.length);
+  const { body } = await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  expect(body).toHaveLength(initialBlogs.length);
 });
 
 test("blog posts has property 'id'", async () => {
