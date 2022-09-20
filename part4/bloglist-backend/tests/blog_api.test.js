@@ -3,7 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
-const { blogs: initialBlogs } = require("./sample_data");
+const { initialBlogs, blogsInDb } = require("./test_helper");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -19,7 +19,7 @@ test("returns the correct amount of blog posts in JSON format", async () => {
   expect(body).toHaveLength(initialBlogs.length);
 });
 
-test("blog posts has property 'id'", async () => {
+test("blog posts have property 'id'", async () => {
   const response = await api.get("/api/blogs");
   expect(response.body[0].id).toBeDefined();
 });
@@ -38,10 +38,10 @@ test("a new blog post can be created", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
-  expect(response.body).toHaveLength(initialBlogs.length + 1);
+  const blogs = await blogsInDb();
 
-  expect(response.body).toEqual(
+  expect(blogs).toHaveLength(initialBlogs.length + 1);
+  expect(blogs).toEqual(
     expect.arrayContaining([expect.objectContaining(newBlog)])
   );
 });
@@ -56,8 +56,8 @@ describe("missing properties", () => {
 
     await api.post("/api/blogs").send(newBlog);
 
-    const response = await api.get("/api/blogs");
-    const result = response.body.find((it) => it.title === newBlog.title);
+    const blogs = await blogsInDb();
+    const result = blogs.find((it) => it.title === newBlog.title);
     expect(result.likes).toBe(0);
   });
 
@@ -80,12 +80,12 @@ describe("missing properties", () => {
 
 describe("deleting blog posts", () => {
   test("a blog post can be deleted", async () => {
-    const { body: blogsAtStart } = await api.get("/api/blogs");
+    const blogsAtStart = await blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
 
-    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    const blogsAtEnd = await blogsInDb();
     expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1);
   });
 
@@ -103,31 +103,31 @@ describe("deleting blog posts", () => {
 });
 
 describe("updating blog posts", () => {
-  const updateBlog = async (blogToUpdate) => {
+  const updateBlogAndTest = async (blogToUpdate) => {
     await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate);
-    const { body: blogsAtEnd } = await api.get("/api/blogs");
+    const blogsAtEnd = await blogsInDb();
     const updatedBlog = blogsAtEnd.find((it) => it.id === blogToUpdate.id);
     expect(updatedBlog).toEqual(blogToUpdate);
   };
 
   test("blog title can be updated", async () => {
-    const { body: blogsAtStart } = await api.get("/api/blogs");
-    await updateBlog({ ...blogsAtStart[0], title: "updated" });
+    const blogsAtStart = await blogsInDb();
+    await updateBlogAndTest({ ...blogsAtStart[0], title: "updated" });
   });
 
   test("blog author can be updated", async () => {
-    const { body: blogsAtStart } = await api.get("/api/blogs");
-    await updateBlog({ ...blogsAtStart[0], author: "updated" });
+    const blogsAtStart = await blogsInDb();
+    await updateBlogAndTest({ ...blogsAtStart[0], author: "updated" });
   });
 
   test("blog url can be updated", async () => {
-    const { body: blogsAtStart } = await api.get("/api/blogs");
-    await updateBlog({ ...blogsAtStart[0], url: "updated" });
+    const blogsAtStart = await blogsInDb();
+    await updateBlogAndTest({ ...blogsAtStart[0], url: "updated" });
   });
 
   test("blog likes can be updated", async () => {
-    const { body: blogsAtStart } = await api.get("/api/blogs");
-    await updateBlog({ ...blogsAtStart[0], likes: 9000 });
+    const blogsAtStart = await blogsInDb();
+    await updateBlogAndTest({ ...blogsAtStart[0], likes: 9000 });
   });
 });
 

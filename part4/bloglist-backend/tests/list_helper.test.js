@@ -1,5 +1,5 @@
 const listHelper = require("../utils/list_helper");
-const { listWithOneBlog, blogs } = require("./sample_data");
+const { listWithOneBlog, initialBlogs } = require("./test_helper");
 
 test("dummy returns one", () => {
   const blogs = [];
@@ -14,7 +14,7 @@ describe("total likes", () => {
   });
 
   test("returns sum of likes of a list of blogs", () => {
-    const result = listHelper.totalLikes(blogs);
+    const result = listHelper.totalLikes(initialBlogs);
     expect(result).toBe(36);
   });
 });
@@ -26,7 +26,7 @@ describe("favorite blog", () => {
   });
 
   test("returns blog with most likes", () => {
-    const result = listHelper.favoriteBlog(blogs);
+    const result = listHelper.favoriteBlog(initialBlogs);
 
     expect(result).toEqual({
       _id: "5a422b3a1b54a676234d17f9",
@@ -47,7 +47,7 @@ describe("author with most blogs", () => {
   });
 
   test("returns author with most blogs", () => {
-    const result = listHelper.mostBlogs(blogs);
+    const result = listHelper.mostBlogs(initialBlogs);
     const expected = {
       author: "Robert C. Martin",
       blogs: 3,
@@ -64,7 +64,7 @@ describe("author with most likes", () => {
   });
 
   test("returns author with most likes", () => {
-    const result = listHelper.mostLikes(blogs);
+    const result = listHelper.mostLikes(initialBlogs);
     const expected = {
       author: "Edsger W. Dijkstra",
       likes: 17,
