@@ -29,7 +29,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response) => {
 
   if (blog.user.toString() !== user.id.toString()) {
     return response
-      .status(204)
+      .status(401)
       .json({ error: "cannot delete other user's blogs" });
   }
 
@@ -54,7 +54,7 @@ blogsRouter.put("/:id", userExtractor, async (request, response) => {
 
   if (blog.user.toString() !== user.id.toString()) {
     return response
-      .status(204)
+      .status(401)
       .json({ error: "cannot update other user's blogs" });
   }
 
