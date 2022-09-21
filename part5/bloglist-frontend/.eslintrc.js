@@ -20,6 +20,7 @@ module.exports = {
     'no-unused-vars': 'warn',
     'react/prop-types': 0,
     'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-indent': ['warn', 2]
   }
 }
