@@ -9,6 +9,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -18,6 +21,7 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
       setUser(user)
     }
   }, [])
@@ -30,6 +34,7 @@ const App = () => {
         username,
         password
       })
+      blogService.setToken(user.token)
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       )
@@ -43,17 +48,45 @@ const App = () => {
 
   const handleLogout = (event) => {
     event.preventDefault()
-    console.log('loging out')
+    blogService.setToken(null)
     window.localStorage.clear()
     setUser(null)
+  }
+
+  const handleCreate = async (event) => {
+    event.preventDefault()
+    try {
+      const returnedBlog = await blogService.create({ title, author, url })
+      console.log('blog created: ', returnedBlog)
+      setBlogs(blogs.concat(returnedBlog))
+    } catch (error) {
+      console.log('Creating new blog failed: ', error.response.data.error)
+    }
   }
 
   return (
     <div>
       {user === null
-        ? LoginForm({ username, setUsername, password, setPassword, handleLogin })
+        ? LoginForm({
+          username,
+          setUsername,
+          password,
+          setPassword,
+          handleLogin
+        })
         : <div>
-          {BlogView({ user, blogs, handleLogout })}
+          {BlogView({
+            user,
+            blogs,
+            handleLogout,
+            handleCreate,
+            title,
+            setTitle,
+            author,
+            setAuthor,
+            url,
+            setUrl
+          })}
         </div>
       }
     </div>
