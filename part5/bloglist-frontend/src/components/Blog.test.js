@@ -48,4 +48,14 @@ describe('<Blog />', () => {
     expect(element).toHaveTextContent(blog.url)
     expect(element).toHaveTextContent(blog.likes)
   })
+
+  test('"like" button is clicked twice', async () => {
+    const expandButton = screen.getByText('view')
+    await userEvent.setup().click(expandButton)
+    const likeButton = screen.getByText('like')
+    const userSimulator = userEvent.setup()
+    await userSimulator.click(likeButton)
+    await userSimulator.click(likeButton)
+    expect(updateblog.mock.calls).toHaveLength(2)
+  })
 })
