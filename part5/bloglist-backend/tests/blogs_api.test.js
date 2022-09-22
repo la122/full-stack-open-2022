@@ -35,14 +35,12 @@ describe('when there are some blogs in database', () => {
   test('a blog can be deleted', async () => {
     const aBlogAtStart = (await helper.blogsInDb())[0]
 
-    await api
-      .delete(`/api/blogs/${aBlogAtStart.id}`)
-      .expect(204)
+    await api.delete(`/api/blogs/${aBlogAtStart.id}`).expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
-    const titles = blogsAtEnd.map(b => b.title)
+    const titles = blogsAtEnd.map((b) => b.title)
     expect(titles).not.toContain(aBlogAtStart.title)
   })
 
@@ -53,13 +51,10 @@ describe('when there are some blogs in database', () => {
       likes: 99
     }
 
-    await api
-      .put(`/api/blogs/${aBlogAtStart.id}`)
-      .send(editedBlog)
-      .expect(200)
+    await api.put(`/api/blogs/${aBlogAtStart.id}`).send(editedBlog).expect(200)
 
     const blogsAtEnd = await helper.blogsInDb()
-    const aBlogAtEnd = blogsAtEnd.find(b => b.id === aBlogAtStart.id)
+    const aBlogAtEnd = blogsAtEnd.find((b) => b.id === aBlogAtStart.id)
     expect(aBlogAtEnd.likes).toBe(99)
   })
 
@@ -98,7 +93,7 @@ describe('when there are some blogs in database', () => {
       const blogsAtEnd = await helper.blogsInDb()
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-      const titles = blogsAtEnd.map(b => b.title)
+      const titles = blogsAtEnd.map((b) => b.title)
       expect(titles).toContain('Benefits of Scrumban')
     })
 

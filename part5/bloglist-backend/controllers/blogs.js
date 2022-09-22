@@ -5,9 +5,9 @@ const Blog = require('../models/blog')
 // const User = require('../models/user')
 
 router.get('/', async (request, response) => {
-  const notes = await Blog
+  const notes = await Blog.find({})
     .find({})
-    .find({}).populate('user', { username: 1, name: 1 })
+    .populate('user', { username: 1, name: 1 })
 
   response.json(notes)
 })
@@ -48,12 +48,11 @@ router.delete('/:id', async (request, response) => {
 router.put('/:id', async (request, response) => {
   const blog = request.body
 
-  const updatedBlog = await Blog
-    .findByIdAndUpdate(
-      request.params.id,
-      blog,
-      { new: true, runValidators: true, context: 'query' }
-    )
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  })
 
   response.json(updatedBlog)
 })

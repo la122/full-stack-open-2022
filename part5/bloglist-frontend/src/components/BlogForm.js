@@ -1,5 +1,11 @@
 const BlogView = ({
-  handleCreate, title, setTitle, author, setAuthor, url, setUrl
+  handleCreate,
+  title,
+  setTitle,
+  author,
+  setAuthor,
+  url,
+  setUrl
 }) => (
   <form onSubmit={handleCreate}>
     <h2>create new</h2>

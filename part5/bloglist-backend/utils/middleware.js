@@ -21,7 +21,10 @@ const errorHandler = (error, request, response, next) => {
 const userExtractor = async (request, response, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    const decodedToken = jwt.verify(authorization.substring(7), process.env.SECRET)
+    const decodedToken = jwt.verify(
+      authorization.substring(7),
+      process.env.SECRET
+    )
     if (decodedToken) {
       request.user = await User.findById(decodedToken.id)
     }
@@ -31,5 +34,6 @@ const userExtractor = async (request, response, next) => {
 }
 
 module.exports = {
-  errorHandler, userExtractor
+  errorHandler,
+  userExtractor
 }

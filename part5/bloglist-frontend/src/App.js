@@ -42,9 +42,7 @@ const App = () => {
         password
       })
       blogService.setToken(user.token)
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -93,47 +91,43 @@ const App = () => {
   const loginPage = () => (
     <>
       <h2>log in to application</h2>
-      <Notification notification={notification}/>
+      <Notification notification={notification} />
       <LoginForm
-      username={username}
-      setUsername={setUsername}
-      password= {password}
-      setPassword={setPassword}
-      handleLogin={handleLogin}/>
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+      />
     </>
   )
 
   const blogsPage = () => (
     <>
       <h2>blogs</h2>
-      <Notification notification={notification}/>
-      <p>{user.name} logged in <Button text='logout' handleClick={handleLogout} /></p>
+      <Notification notification={notification} />
+      <p>
+        {user.name} logged in{' '}
+        <Button text="logout" handleClick={handleLogout} />
+      </p>
 
       <BlogForm
-      handleCreate={handleCreate}
-      title={title}
-      setTitle={setTitle}
-      author={author}
-      setAuthor={setAuthor}
-      url={url}
-      setUrl={setUrl}
+        handleCreate={handleCreate}
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        url={url}
+        setUrl={setUrl}
       />
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </>
   )
 
-  return (
-    <div>
-      {user === null
-        ? loginPage()
-        : blogsPage()
-       }
-    </div>
-  )
+  return <div>{user === null ? loginPage() : blogsPage()}</div>
 }
 
 export default App
