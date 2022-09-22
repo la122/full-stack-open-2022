@@ -98,7 +98,7 @@ const App = () => {
         message: `updated blog '${returnedBlog.title}'`,
         color: 'green'
       })
-      blogFormRef.current.toggleVisibility()
+      // blogFormRef.current.toggleVisibility()
     } catch (error) {
       setNotification({
         message: `Creating new blog failed: ${error.response.data.error}`,
@@ -120,6 +120,8 @@ const App = () => {
       />
     </>
   )
+
+  blogs.sort((a, b) => b.likes - a.likes)
 
   const blogsPage = () => (
     <>
