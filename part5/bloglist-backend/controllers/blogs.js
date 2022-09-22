@@ -1,9 +1,6 @@
 const router = require('express').Router()
-// const jwt = require('jsonwebtoken')
-
 const Blog = require('../models/blog')
 const User = require('../models/user')
-// const User = require('../models/user')
 
 router.get('/', async (request, response) => {
   const blogs = await Blog.find({})
@@ -25,8 +22,8 @@ router.post('/', async (request, response) => {
 
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
-
-  response.status(201).json(savedBlog)
+  const result = await savedBlog.populate('user', { username: 1, name: 1 })
+  response.status(201).json(result)
 })
 
 router.delete('/:id', async (request, response) => {
