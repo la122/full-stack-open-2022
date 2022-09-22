@@ -16,12 +16,13 @@ describe('<Blog />', () => {
     user
   }
 
-  const updateblog = jest.fn()
-  const deleteBlog = jest.fn()
-
+  let updateblog
+  let deleteBlog
   let container
 
   beforeEach(() => {
+    updateblog = jest.fn()
+    deleteBlog = jest.fn()
     container = render(
       <Blog
         blog={blog}
