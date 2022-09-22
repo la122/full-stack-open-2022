@@ -1,8 +1,9 @@
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
+import userEvent from '@testing-library/user-event'
 
-test('renders content', () => {
+describe('<Blog />', () => {
   const user = {
     username: 'supertester'
   }
@@ -18,19 +19,33 @@ test('renders content', () => {
   const updateblog = jest.fn()
   const deleteBlog = jest.fn()
 
-  const { container } = render(
-    <Blog
-      blog={blog}
-      user={user}
-      updateBlog={updateblog}
-      deleteBlog={deleteBlog}
-    />
-  )
+  let container
 
-  const element = container.querySelector('.blog')
-  expect(element).toBeDefined()
-  expect(element).toHaveTextContent(blog.title)
-  expect(element).toHaveTextContent(blog.author)
-  expect(element).not.toHaveTextContent(blog.url)
-  expect(element).not.toHaveTextContent(blog.likes)
+  beforeEach(() => {
+    container = render(
+      <Blog
+        blog={blog}
+        user={user}
+        updateBlog={updateblog}
+        deleteBlog={deleteBlog}
+      />
+    ).container
+  })
+
+  test('renders only title and author by default', () => {
+    const element = container.querySelector('.blog')
+    expect(element).toBeDefined()
+    expect(element).toHaveTextContent(blog.title)
+    expect(element).toHaveTextContent(blog.author)
+    expect(element).not.toHaveTextContent(blog.url)
+    expect(element).not.toHaveTextContent(blog.likes)
+  })
+
+  test('renders url and number of likes when expanded', async () => {
+    const element = container.querySelector('.blog')
+    const button = screen.getByText('view')
+    await userEvent.setup().click(button)
+    expect(element).toHaveTextContent(blog.url)
+    expect(element).toHaveTextContent(blog.likes)
+  })
 })
