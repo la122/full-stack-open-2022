@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Button from './Button'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
 
   const blogStyle = {
@@ -10,6 +10,12 @@ const Blog = ({ blog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const handleLikeClick = (event) => {
+    event.preventDefault()
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+    updateBlog(updatedBlog)
   }
 
   const blogWithoutDetails = () => (
@@ -26,7 +32,7 @@ const Blog = ({ blog }) => {
       <br />
       {blog.url}
       <br />
-      {blog.likes} <Button text="like" />
+      {blog.likes} <Button text="like" handleClick={handleLikeClick} />
       <br />
       {blog.user?.name}
     </div>

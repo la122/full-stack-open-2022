@@ -87,6 +87,26 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (blogObject) => {
+    try {
+      const returnedBlog = await blogService.update(blogObject)
+      console.log('blog updated: ', returnedBlog)
+      setBlogs(
+        blogs.map((it) => (it.id !== returnedBlog.id ? it : returnedBlog))
+      )
+      setNotification({
+        message: `updated blog '${returnedBlog.title}'`,
+        color: 'green'
+      })
+      blogFormRef.current.toggleVisibility()
+    } catch (error) {
+      setNotification({
+        message: `Creating new blog failed: ${error.response.data.error}`,
+        color: 'red'
+      })
+    }
+  }
+
   const loginPage = () => (
     <>
       <h2>log in to application</h2>
@@ -114,7 +134,7 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </>
   )

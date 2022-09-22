@@ -2,14 +2,15 @@ const router = require('express').Router()
 // const jwt = require('jsonwebtoken')
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 // const User = require('../models/user')
 
 router.get('/', async (request, response) => {
-  const notes = await Blog.find({})
+  const blogs = await Blog.find({})
     .find({})
     .populate('user', { username: 1, name: 1 })
 
-  response.json(notes)
+  response.json(blogs)
 })
 
 router.post('/', async (request, response) => {
@@ -47,14 +48,27 @@ router.delete('/:id', async (request, response) => {
 
 router.put('/:id', async (request, response) => {
   const blog = request.body
+  const blogUser = await User.findById(blog.user.id)
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
-    new: true,
-    runValidators: true,
-    context: 'query'
-  })
+  if (!blogUser) {
+    return response.status(400).json({
+      error: 'blog user not found'
+    })
+  }
 
-  response.json(updatedBlog)
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { ...blog, user: blog.user.id },
+    {
+      new: true,
+      runValidators: true,
+      context: 'query'
+    }
+  )
+
+  blogUser.blogs = blogUser.blogs.concat(blog._id)
+  const result = await updatedBlog.populate('user', { username: 1, name: 1 })
+  response.json(result)
 })
 
 module.exports = router
