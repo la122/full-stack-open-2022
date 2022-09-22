@@ -49,7 +49,11 @@ const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
     </div>
   )
 
-  return <>{detailsVisible ? blogWithDetails() : blogWithoutDetails()}</>
+  return (
+    <div className="blog">
+      {detailsVisible ? blogWithDetails() : blogWithoutDetails()}
+    </div>
+  )
 }
 
 Blog.propTypes = {
