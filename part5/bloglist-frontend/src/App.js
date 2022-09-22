@@ -98,10 +98,28 @@ const App = () => {
         message: `updated blog '${returnedBlog.title}'`,
         color: 'green'
       })
-      // blogFormRef.current.toggleVisibility()
     } catch (error) {
       setNotification({
         message: `Creating new blog failed: ${error.response.data.error}`,
+        color: 'red'
+      })
+    }
+  }
+
+  const deleteBlog = async (blogObject) => {
+    try {
+      await blogService.remove(blogObject)
+      const blogsUpdated = blogs.filter((it) => {
+        return it.id !== blogObject.id
+      })
+      setBlogs(blogsUpdated)
+      setNotification({
+        message: `removed blog '${blogObject.title}'`,
+        color: 'green'
+      })
+    } catch (error) {
+      setNotification({
+        message: `removing blog failed: ${error.response.data.error}`,
         color: 'red'
       })
     }
@@ -136,7 +154,13 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          user={user}
+          updateBlog={updateBlog}
+          deleteBlog={deleteBlog}
+        />
       ))}
     </>
   )

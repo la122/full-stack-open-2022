@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Button from './Button'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
+  const isUserCreator = user.username === blog.user.username
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,6 +17,13 @@ const Blog = ({ blog, updateBlog }) => {
     event.preventDefault()
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
     updateBlog(updatedBlog)
+  }
+
+  const handleDeletelick = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove log ${blog.title}?`)) {
+      deleteBlog(blog)
+    }
   }
 
   const blogWithoutDetails = () => (
@@ -35,6 +43,8 @@ const Blog = ({ blog, updateBlog }) => {
       {blog.likes} <Button text="like" handleClick={handleLikeClick} />
       <br />
       {blog.user?.name}
+      <br />
+      {isUserCreator && <Button text="delete" handleClick={handleDeletelick} />}
     </div>
   )
 
