@@ -61,7 +61,7 @@ describe('Blog app', function () {
 
       it('user can like a blog', function () {
         cy.contains('view').click()
-        cy.contains('like').click()
+        cy.get('#like-button').click()
         cy.contains('1')
       })
 
@@ -82,6 +82,43 @@ describe('Blog app', function () {
         cy.contains('view').click()
         cy.get('html').should('not.contain', 'delete')
       })
+    })
+
+    it('blogs are ordered according to likes', function () {
+      cy.createBlog({
+        title: 'The title with the least likes',
+        author: 'cypress',
+        url: 'www.cypress.io'
+      })
+
+      cy.createBlog({
+        title: 'The title with the most likes',
+        author: 'cypress',
+        url: 'www.cypress.io'
+      })
+
+      cy.createBlog({
+        title: 'The title with the second most likes',
+        author: 'cypress',
+        url: 'www.cypress.io'
+      })
+
+      cy.contains('the most likes').contains('view').click()
+      cy.get('#like-button').click()
+      cy.contains('hide').click()
+
+      cy.contains('the second most likes').contains('view').click()
+      cy.get('#like-button').click()
+      cy.contains('hide').click()
+
+      cy.contains('the most likes').contains('view').click()
+      cy.get('#like-button').click()
+      cy.contains('hide').click()
+
+      cy.get('.blog').eq(0).should('contain', 'The title with the most likes')
+      cy.get('.blog')
+        .eq(1)
+        .should('contain', 'The title with the second most likes')
     })
   })
 })
