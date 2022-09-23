@@ -40,13 +40,48 @@ describe('Blog app', function () {
     beforeEach(function () {
       cy.login({ username: 'mluukkai', password: 'salainen' })
     })
+
     it('a new blog can be created', function () {
       cy.contains('new blog').click()
       cy.get('#title-input').type('a blog created by cypress')
       cy.get('#author-input').type('cypress')
       cy.get('#url-input').type('www.cypress.io')
       cy.get('#create-button').click()
-      cy.should('contain', 'a blog created by cypress')
+      cy.contains('a blog created by cypress')
+    })
+
+    describe('When there is a blog', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'a blog created by cypress',
+          author: 'cypress',
+          url: 'www.cypress.io'
+        })
+      })
+
+      it('user can like a blog', function () {
+        cy.contains('view').click()
+        cy.contains('like').click()
+        cy.contains('1')
+      })
+
+      it('user can delete his blog', function () {
+        cy.contains('view').click()
+        cy.contains('delete').click()
+        cy.contains('removed blog')
+      })
+
+      it('other users cannot delete the blog', function () {
+        const user = {
+          name: 'Not Matti Luukkainen',
+          username: 'notmluukkai',
+          password: 'salainen'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users/', user)
+        cy.login({ username: 'notmluukkai', password: 'salainen' })
+        cy.contains('view').click()
+        cy.get('html').should('not.contain', 'delete')
+      })
     })
   })
 })
