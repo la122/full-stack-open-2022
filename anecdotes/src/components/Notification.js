@@ -9,11 +9,11 @@ const Notification = () => {
     setShow(true)
     const timeout = setTimeout(() => {
       setShow(false)
-    }, 5000)
+    }, notification.seconds * 1000)
     return () => clearTimeout(timeout)
   }, [notification])
 
-  if (notification === null || show === false) {
+  if (notification.message === '' || show === false) {
     return null
   }
 
@@ -22,7 +22,7 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
-  return notification && <div style={style}>{notification}</div>
+  return notification && <div style={style}>{notification.message}</div>
 }
 
 export default Notification
