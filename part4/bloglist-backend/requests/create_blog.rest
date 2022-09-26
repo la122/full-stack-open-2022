@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYzMjliYjQxNjI3NzhjNjUzZTBmN2RlZCIsImlhdCI6MTY2MzY4MzM1OSwiZXhwIjoxNjYzNjgzNDE5fQ.B97iKH9LHOT2d8fcrMNksdf4fQq7j0PnHnI6l4UfmxQ
+
+{
+    "title": "New blog",
+    "author": "Arto Hellas",
+    "url": "www.new.blog",
+    "likes": "0"
+}
