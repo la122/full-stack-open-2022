@@ -4,7 +4,7 @@ const schema = mongoose.Schema({
   username: {
     type: String,
     required: true,
-    minlength: 3,
+    minlength: 3
   },
   name: String,
   passwordHash: String,
@@ -13,7 +13,7 @@ const schema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Blog'
     }
-  ],
+  ]
 })
 
 schema.set('toJSON', {

@@ -1,4 +1,3 @@
-import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -19,7 +18,7 @@ it('when blog is created, callback has correct data', () => {
   userEvent.type(authorInput, blogToCreate.author)
 
   const titleInput = screen.getByPlaceholderText('title of the blog')
-  userEvent.type(titleInput, blogToCreate. title)
+  userEvent.type(titleInput, blogToCreate.title)
 
   const urlInput = screen.getByPlaceholderText('url of the blog')
   userEvent.type(urlInput, blogToCreate.url)

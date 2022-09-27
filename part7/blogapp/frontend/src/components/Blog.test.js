@@ -1,11 +1,10 @@
-import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('blog', () => {
-  let onLike = jest.fn()
+  const onLike = jest.fn()
 
   beforeEach(() => {
     const blog = {
@@ -15,18 +14,14 @@ describe('blog', () => {
       likes: 5
     }
 
-    render(<Blog
-      blog={blog}
-      likeBlog={onLike}
-      removeBlog={() => {}}
-    />)
+    render(<Blog blog={blog} likeBlog={onLike} removeBlog={() => {}} />)
   })
 
   test('renders by default only title and author', () => {
     const authorElement = screen.getByText('Kalle Ilves', { exact: false })
     expect(authorElement).toBeDefined()
 
-    const titleElement = screen.getByText('Testing is easy',  { exact: false })
+    const titleElement = screen.getByText('Testing is easy', { exact: false })
     expect(titleElement).toBeDefined()
 
     const urlElement = screen.queryByText('http://lynx.fi/testing')
