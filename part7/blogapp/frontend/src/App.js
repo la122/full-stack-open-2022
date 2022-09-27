@@ -8,6 +8,8 @@ import Togglable from './components/Togglable'
 import { initialBlogs } from './reducers/blogReducer'
 import { createNotification } from './reducers/notificationReducer'
 import { logout } from './reducers/userReducer'
+import AllUsers from './components/AllUsers'
+import { initialUsers } from './reducers/allUsersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -19,6 +21,10 @@ const App = () => {
   const blogs = useSelector((state) =>
     [...state.blogs].sort((a, b) => b.likes - a.likes)
   )
+
+  useEffect(() => {
+    dispatch(initialUsers())
+  }, [blogs])
 
   const user = useSelector((state) => state.user)
 
@@ -66,6 +72,9 @@ const App = () => {
           <Blog key={blog.id} blog={blog} user={user} />
         ))}
       </div>
+
+      <h2>users</h2>
+      <AllUsers />
     </div>
   )
 }
