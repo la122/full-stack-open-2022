@@ -16,7 +16,7 @@ export const { set } = notificationSlice.actions
 
 let timeoutId = null
 
-export const createNotification = (message, type = 'info', time = 5) => {
+export const createNotification = (message, type = 'info', time = 4) => {
   return (dispatch) => {
     dispatch(set({ message, type }))
 

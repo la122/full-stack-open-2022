@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -7,8 +7,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { initialBlogs } from './reducers/blogReducer'
 import { createNotification } from './reducers/notificationReducer'
-import loginService from './services/login'
-import userService from './services/user'
+import { logout } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -21,35 +20,12 @@ const App = () => {
     [...state.blogs].sort((a, b) => b.likes - a.likes)
   )
 
-  const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
+
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    const userFromStorage = userService.getUser()
-    if (userFromStorage) {
-      setUser(userFromStorage)
-    }
-  }, [])
-
-  const login = async (username, password) => {
-    loginService
-      .login({
-        username,
-        password
-      })
-      .then((user) => {
-        setUser(user)
-        userService.setUser(user)
-        notify(`${user.name} logged in!`)
-      })
-      .catch(() => {
-        notify('wrong username/password', 'alert')
-      })
-  }
-
-  const logout = () => {
-    setUser(null)
-    userService.clearUser()
+  const onLogout = () => {
+    dispatch(logout())
     notify('good bye!')
   }
 
@@ -65,7 +41,7 @@ const App = () => {
     return (
       <>
         <Notification />
-        <LoginForm onLogin={login} />
+        <LoginForm />
       </>
     )
   }
@@ -78,7 +54,7 @@ const App = () => {
 
       <div>
         {user.name} logged in
-        <button onClick={logout}>logout</button>
+        <button onClick={onLogout}>logout</button>
       </div>
 
       <Togglable buttonLabel="new note" ref={blogFormRef}>

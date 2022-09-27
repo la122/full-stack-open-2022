@@ -19,7 +19,7 @@ const BlogDetails = ({ blog, visible, likeBlog, own }) => {
     }
 
     try {
-      dispatch(updateBlog(likedBlog.id, likedBlog))
+      await dispatch(updateBlog(likedBlog.id, likedBlog))
       dispatch(
         createNotification(
           `you liked '${likedBlog.title}' by ${likedBlog.author}`
@@ -27,20 +27,20 @@ const BlogDetails = ({ blog, visible, likeBlog, own }) => {
       )
     } catch (error) {
       createNotification(
-        'linking blog failed: ' + error.response.data.error,
+        'liking blog failed: ' + error.response.data.error,
         'alert'
       )
     }
   }
 
-  const onRemove = () => {
+  const onRemove = async () => {
     const ok = window.confirm(`remove '${blog.title}' by ${blog.author}?`)
     if (!ok) {
       return
     }
 
     try {
-      dispatch(removeBlog(blog.id))
+      await dispatch(removeBlog(blog.id))
       dispatch(
         createNotification(`you removed '${blog.title}' by ${blog.author}`)
       )
