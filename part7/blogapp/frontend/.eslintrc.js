@@ -18,7 +18,14 @@ module.exports = {
     'react/prop-types': 0,
     'no-unused-vars': 'warn',
     'react/no-unescaped-entities': 0,
-
-    quotes: [2, 'single', { allowTemplateLiterals: true }]
+    quotes: [2, 'single', { allowTemplateLiterals: true }],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always'
+      }
+    ]
   }
 }

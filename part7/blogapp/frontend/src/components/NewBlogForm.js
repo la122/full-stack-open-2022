@@ -1,16 +1,32 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { createNotification } from '../reducers/notificationReducer'
 
 const NewBlogForm = ({ onCreate }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const dispatch = useDispatch()
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    onCreate({ title, author, url, likes: 0 })
-    setAuthor('')
-    setTitle('')
-    setUrl('')
+    try {
+      dispatch(createBlog({ title, author, url, likes: 0 }))
+      dispatch(createNotification(`a new blog '${title}' by ${author} added`))
+      onCreate()
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+    } catch (error) {
+      dispatch(
+        createNotification(
+          'creating a blog failed: ' + error.response.data.error,
+          'alert'
+        )
+      )
+    }
   }
 
   return (
