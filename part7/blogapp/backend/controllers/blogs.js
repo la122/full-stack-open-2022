@@ -41,7 +41,12 @@ router.post('/:id/comments', async (request, response) => {
   blog.comments = blog.comments.concat(request.body.comment)
   const updatedBlog = await blog.save()
 
-  response.json(updatedBlog.populate('user', { username: 1, name: 1 }))
+  const blogToReturn = await updatedBlog.populate('user', {
+    username: 1,
+    name: 1
+  })
+
+  response.json(blogToReturn)
 })
 
 router.delete('/:id', async (request, response) => {

@@ -1,13 +1,14 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { removeBlog, updateBlog } from '../reducers/blogReducer'
+import { addComment, removeBlog, updateBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
-import blogs from '../services/blogs'
 
 const BlogView = ({ blog, own }) => {
   if (!blog) {
     return null
   }
+  const [comment, setComment] = useState('')
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -57,6 +58,22 @@ const BlogView = ({ blog, own }) => {
       )
     }
   }
+
+  const onAddComment = async (event) => {
+    event.preventDefault()
+    try {
+      await dispatch(addComment(blog.id, comment))
+      dispatch(createNotification(`added new comment`))
+    } catch (error) {
+      dispatch(
+        createNotification(
+          'adding comment failed: ' + error.response.data.error,
+          'alert'
+        )
+      )
+    }
+  }
+
   return (
     <div>
       <h2>
@@ -72,9 +89,22 @@ const BlogView = ({ blog, own }) => {
       {own && <button onClick={onRemove}>remove</button>}
       <div>
         <h3>comments</h3>
+
+        <form onSubmit={onAddComment}>
+          <input
+            id="commentInput"
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+
+          <button id="create-button" type="submit">
+            add comment
+          </button>
+        </form>
+
         <ul>
-          {blog.comments?.map((comment) => (
-            <li key={comment}>{comment}</li>
+          {blog.comments?.map((comment, index) => (
+            <li key={index}>{comment}</li>
           ))}
         </ul>
       </div>
