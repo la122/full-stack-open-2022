@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
@@ -10,6 +11,7 @@ import { createNotification } from './reducers/notificationReducer'
 import { logout } from './reducers/userReducer'
 import AllUsers from './components/AllUsers'
 import { initialUsers } from './reducers/allUsersReducer'
+import UserView from './components/UserView'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -43,6 +45,12 @@ const App = () => {
     dispatch(createNotification(message, type, time))
   }
 
+  const allUsers = useSelector((state) => state.allUsers)
+  const match = useMatch('/users/:id')
+  const userToShow = match
+    ? allUsers.find((it) => it.id === match.params.id)
+    : null
+
   if (user === null) {
     return (
       <>
@@ -58,23 +66,34 @@ const App = () => {
 
       <Notification />
 
-      <div>
-        {user.name} logged in
-        <button onClick={onLogout}>logout</button>
-      </div>
+      <Routes>
+        <Route path="/users/:id" element={<UserView user={userToShow} />} />
 
-      <Togglable buttonLabel="new note" ref={blogFormRef}>
-        <NewBlogForm onCreate={createBlog} />
-      </Togglable>
+        <Route
+          path="/"
+          element={
+            <>
+              <div>
+                {user.name} logged in
+                <button onClick={onLogout}>logout</button>
+              </div>
 
-      <div id="blogs">
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
-        ))}
-      </div>
+              <Togglable buttonLabel="new note" ref={blogFormRef}>
+                <NewBlogForm onCreate={createBlog} />
+              </Togglable>
 
-      <h2>users</h2>
-      <AllUsers />
+              <div id="blogs">
+                {blogs.map((blog) => (
+                  <Blog key={blog.id} blog={blog} user={user} />
+                ))}
+              </div>
+
+              <h2>users</h2>
+              <AllUsers />
+            </>
+          }
+        />
+      </Routes>
     </div>
   )
 }
