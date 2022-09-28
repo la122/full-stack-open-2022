@@ -32,6 +32,15 @@ describe('when there are some blogs in database', () => {
     expect(response.body[0].id).toBeDefined()
   })
 
+  test('those are returned as json', async () => {
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
   test('a blog can be deleted', async () => {
     const aBlogAtStart = (await helper.blogsInDb())[0]
 
@@ -56,6 +65,20 @@ describe('when there are some blogs in database', () => {
     const blogsAtEnd = await helper.blogsInDb()
     const aBlogAtEnd = blogsAtEnd.find((b) => b.id === aBlogAtStart.id)
     expect(aBlogAtEnd.likes).toBe(99)
+  })
+
+  test('a comment can be added', async () => {
+    const aBlogAtStart = (await helper.blogsInDb())[0]
+    const comment = 'test comment'
+    await api
+      .post(`/api/blogs/${aBlogAtStart.id}/comments`)
+      .send({ comment })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const aBlogAtEnd = blogsAtEnd.find((b) => b.id === aBlogAtStart.id)
+    expect(aBlogAtEnd.comments).toContain(comment)
   })
 
   describe('addition of a blog', () => {

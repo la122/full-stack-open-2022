@@ -31,6 +31,19 @@ router.post('/', async (request, response) => {
   response.status(201).json(blogToReturn)
 })
 
+router.post('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+
+  if (!blog) {
+    return response.status(404).json('Blog not found')
+  }
+
+  blog.comments = blog.comments.concat(request.body.comment)
+  const updatedBlog = await blog.save()
+
+  response.json(updatedBlog.populate('user', { username: 1, name: 1 }))
+})
+
 router.delete('/:id', async (request, response) => {
   const blogToDelete = await Blog.findById(request.params.id)
   if (!blogToDelete) {

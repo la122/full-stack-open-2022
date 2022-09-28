@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { removeBlog, updateBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
+import blogs from '../services/blogs'
 
 const BlogView = ({ blog, own }) => {
   if (!blog) {
@@ -69,6 +70,14 @@ const BlogView = ({ blog, own }) => {
       </div>
       added by {addedBy}
       {own && <button onClick={onRemove}>remove</button>}
+      <div>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments?.map((comment) => (
+            <li key={comment}>{comment}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
