@@ -7,12 +7,11 @@ import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { initialBlogs } from './reducers/blogReducer'
-import { createNotification } from './reducers/notificationReducer'
-import { logout } from './reducers/userReducer'
 import AllUsers from './components/AllUsers'
 import { initialUsers } from './reducers/allUsersReducer'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
+import NavigationMenu from './components/NavigationMenu'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -33,17 +32,8 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const onLogout = () => {
-    dispatch(logout())
-    notify('good bye!')
-  }
-
   const createBlog = async (blog) => {
     blogFormRef.current.toggleVisibility()
-  }
-
-  const notify = (message, type = 'info', time = 5) => {
-    dispatch(createNotification(message, type, time))
   }
 
   const allUsers = useSelector((state) => state.allUsers)
@@ -69,10 +59,11 @@ const App = () => {
 
   return (
     <div>
+      <NavigationMenu user={user} />
+
       <h2>blogs</h2>
 
       <Notification />
-
       <Routes>
         <Route path="/users/:id" element={<UserView user={userToShow} />} />
         <Route
@@ -91,12 +82,7 @@ const App = () => {
           path="/"
           element={
             <>
-              <div>
-                {user.name} logged in
-                <button onClick={onLogout}>logout</button>
-              </div>
-
-              <Togglable buttonLabel="new note" ref={blogFormRef}>
+              <Togglable buttonLabel="create new" ref={blogFormRef}>
                 <NewBlogForm onCreate={createBlog} />
               </Togglable>
 
@@ -105,7 +91,14 @@ const App = () => {
                   <Blog key={blog.id} blog={blog} />
                 ))}
               </div>
+            </>
+          }
+        />
 
+        <Route
+          path="/users"
+          element={
+            <>
               <h2>users</h2>
               <AllUsers />
             </>

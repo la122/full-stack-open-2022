@@ -23,7 +23,7 @@ Cypress.Commands.add('log_in', (username, password) => {
 })
 
 Cypress.Commands.add('create_blog', ({ title, author, url }) => {
-  cy.contains('new note').click()
+  cy.contains('create new').click()
   cy.get('#title').type(title)
   cy.get('#author').type(author)
   cy.get('#url').type(url)
