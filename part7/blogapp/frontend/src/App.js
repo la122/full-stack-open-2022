@@ -12,6 +12,7 @@ import { logout } from './reducers/userReducer'
 import AllUsers from './components/AllUsers'
 import { initialUsers } from './reducers/allUsersReducer'
 import UserView from './components/UserView'
+import BlogView from './components/BlogView'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -46,9 +47,15 @@ const App = () => {
   }
 
   const allUsers = useSelector((state) => state.allUsers)
-  const match = useMatch('/users/:id')
-  const userToShow = match
-    ? allUsers.find((it) => it.id === match.params.id)
+
+  const userMatch = useMatch('/users/:id')
+  const userToShow = userMatch
+    ? allUsers.find((it) => it.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useMatch('/blogs/:id')
+  const blogToShow = blogMatch
+    ? blogs.find((it) => it.id === blogMatch.params.id)
     : null
 
   if (user === null) {
@@ -68,6 +75,17 @@ const App = () => {
 
       <Routes>
         <Route path="/users/:id" element={<UserView user={userToShow} />} />
+        <Route
+          path="/blogs/:id"
+          element={
+            <BlogView
+              blog={blogToShow}
+              own={
+                blogToShow?.user && user.username === blogToShow.user.username
+              }
+            />
+          }
+        />
 
         <Route
           path="/"
@@ -84,7 +102,7 @@ const App = () => {
 
               <div id="blogs">
                 {blogs.map((blog) => (
-                  <Blog key={blog.id} blog={blog} user={user} />
+                  <Blog key={blog.id} blog={blog} />
                 ))}
               </div>
 
