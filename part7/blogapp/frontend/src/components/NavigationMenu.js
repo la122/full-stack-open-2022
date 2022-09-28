@@ -1,8 +1,15 @@
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { createNotification } from '../reducers/notificationReducer'
 import { logout } from '../reducers/userReducer'
-
+import {
+  HeaderNavigation,
+  ALIGN,
+  StyledNavigationList,
+  StyledNavigationItem
+} from 'baseui/header-navigation'
+import { StyledLink } from 'baseui/link'
+import { Button, SIZE } from 'baseui/button'
+import { Link } from 'react-router-dom'
 const NavigationMenu = ({ user }) => {
   const dispatch = useDispatch()
 
@@ -11,24 +18,29 @@ const NavigationMenu = ({ user }) => {
     dispatch(createNotification('good bye'))
   }
 
-  const padding = {
-    paddingRight: 5
-  }
-
-  const style = {
-    background: 'lightgrey'
-  }
-
   return (
-    <div style={style}>
-      <Link style={padding} to="/">
-        blogs
-      </Link>
-      <Link style={padding} to="/users">
-        users
-      </Link>{' '}
-      {user.name} logged in <button onClick={onLogout}>logout</button>
-    </div>
+    <HeaderNavigation>
+      <StyledNavigationList $align={ALIGN.center}>
+        <StyledNavigationItem>
+          <StyledLink $as={Link} to="/">
+            blogs
+          </StyledLink>
+        </StyledNavigationItem>
+
+        <StyledNavigationItem>
+          <StyledLink $as={Link} to="/users">
+            users
+          </StyledLink>
+        </StyledNavigationItem>
+
+        <StyledNavigationItem>
+          {user.name} logged in{' '}
+          <Button size={SIZE.compact} onClick={onLogout}>
+            logout
+          </Button>
+        </StyledNavigationItem>
+      </StyledNavigationList>
+    </HeaderNavigation>
   )
 }
 
