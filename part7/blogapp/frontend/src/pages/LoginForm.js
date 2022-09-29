@@ -2,6 +2,11 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/userReducer'
 import { createNotification } from '../reducers/notificationReducer'
+import { FormControl } from 'baseui/form-control'
+import { Input } from 'baseui/input'
+import { Button } from 'baseui/button'
+import { Block } from 'baseui/block'
+import { Heading, HeadingLevel } from 'baseui/heading'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -20,32 +25,33 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
-      <h2>Log in to application</h2>
+    <Block id="blogs" display="grid" justifyItems="center">
+      <HeadingLevel>
+        <Heading>Log in to application</Heading>
+      </HeadingLevel>
 
       <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input
+        <FormControl label="Username">
+          <Input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
             id="username"
           />
-        </div>
-        <div>
-          password
-          <input
+        </FormControl>
+
+        <FormControl label="Password">
+          <Input
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             id="password"
           />
-        </div>
-        <button id="login-button" type="submit">
+        </FormControl>
+        <Button id="login-button" type="submit">
           login
-        </button>
+        </Button>
       </form>
-    </div>
+    </Block>
   )
 }
 

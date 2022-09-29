@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route, useMatch } from 'react-router-dom'
-import LoginForm from './components/LoginForm'
+import LoginForm from './pages/LoginForm'
 import Notification from './components/Notification'
 import { initialBlogs } from './reducers/blogReducer'
 import UserListPage from './pages/UserListPage'
