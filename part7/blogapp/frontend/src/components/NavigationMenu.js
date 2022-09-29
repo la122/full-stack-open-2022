@@ -8,7 +8,7 @@ import {
   StyledNavigationItem
 } from 'baseui/header-navigation'
 import { StyledLink } from 'baseui/link'
-import { Button, SIZE } from 'baseui/button'
+import { Button, SHAPE, SIZE } from 'baseui/button'
 import { Link } from 'react-router-dom'
 const NavigationMenu = ({ user }) => {
   const dispatch = useDispatch()
@@ -35,7 +35,7 @@ const NavigationMenu = ({ user }) => {
 
         <StyledNavigationItem>
           {user.name} logged in{' '}
-          <Button size={SIZE.compact} onClick={onLogout}>
+          <Button size={SIZE.compact} shape={SHAPE.pill} onClick={onLogout}>
             logout
           </Button>
         </StyledNavigationItem>

@@ -4,12 +4,12 @@ import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { initialBlogs } from './reducers/blogReducer'
-import UsersPage from './pages/UsersPage'
+import UserListPage from './pages/UserListPage'
 import { initialUsers } from './reducers/allUsersReducer'
-import UserView from './components/UserView'
+import UserPage from './pages/UserPage'
 import BlogView from './components/BlogView'
 import NavigationMenu from './components/NavigationMenu'
-import BlogsPage from './pages/BlogPage'
+import BlogListPage from './pages/BlogListPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -55,7 +55,7 @@ const App = () => {
 
       <Notification />
       <Routes>
-        <Route path="/users/:id" element={<UserView user={userToShow} />} />
+        <Route path="/users/:id" element={<UserPage user={userToShow} />} />
         <Route
           path="/blogs/:id"
           element={
@@ -68,9 +68,9 @@ const App = () => {
           }
         />
 
-        <Route path="/" element={<BlogsPage blogs={blogs} />} />
+        <Route path="/" element={<BlogListPage blogs={blogs} />} />
 
-        <Route path="/users" element={<UsersPage />} />
+        <Route path="/users" element={<UserListPage />} />
       </Routes>
     </div>
   )

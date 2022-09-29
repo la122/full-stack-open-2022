@@ -4,7 +4,7 @@ import Togglable from '../components/Togglable'
 import NewBlogForm from '../components/NewBlogForm'
 import { useRef } from 'react'
 
-const BlogsPage = ({ blogs }) => {
+const BlogListPage = ({ blogs }) => {
   const blogFormRef = useRef()
 
   const createBlog = async (blog) => {
@@ -23,4 +23,4 @@ const BlogsPage = ({ blogs }) => {
   )
 }
 
-export default BlogsPage
+export default BlogListPage
