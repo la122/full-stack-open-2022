@@ -1,17 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route, useMatch } from 'react-router-dom'
-import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
-import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import { initialBlogs } from './reducers/blogReducer'
 import AllUsers from './components/AllUsers'
 import { initialUsers } from './reducers/allUsersReducer'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
 import NavigationMenu from './components/NavigationMenu'
+import BlogsPage from './pages/BlogPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -29,12 +27,6 @@ const App = () => {
   }, [blogs])
 
   const user = useSelector((state) => state.user)
-
-  const blogFormRef = useRef()
-
-  const createBlog = async (blog) => {
-    blogFormRef.current.toggleVisibility()
-  }
 
   const allUsers = useSelector((state) => state.allUsers)
 
@@ -61,8 +53,6 @@ const App = () => {
     <div>
       <NavigationMenu user={user} />
 
-      <h2>blogs</h2>
-
       <Notification />
       <Routes>
         <Route path="/users/:id" element={<UserView user={userToShow} />} />
@@ -78,22 +68,7 @@ const App = () => {
           }
         />
 
-        <Route
-          path="/"
-          element={
-            <>
-              <Togglable buttonLabel="create new" ref={blogFormRef}>
-                <NewBlogForm onCreate={createBlog} />
-              </Togglable>
-
-              <div id="blogs">
-                {blogs.map((blog) => (
-                  <Blog key={blog.id} blog={blog} />
-                ))}
-              </div>
-            </>
-          }
-        />
+        <Route path="/" element={<BlogsPage blogs={blogs} />} />
 
         <Route
           path="/users"
