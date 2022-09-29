@@ -1,20 +1,19 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { MessageCard } from 'baseui/message-card'
+import { Block } from 'baseui/block'
+import { StyledLink } from 'baseui/link'
 
 const Blog = ({ blog }) => {
-  const style = {
-    padding: 3,
-    margin: 5,
-    borderStyle: 'solid',
-    borderWidth: 1
-  }
-
   return (
-    <div style={style} className="blog">
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-    </div>
+    <Block id="blogs" display="grid" justifyItems="center">
+      <StyledLink $as={Link} to={`/blogs/${blog.id}`}>
+        <MessageCard
+          className="blog"
+          paragraph={blog.title + ' ' + blog.author}
+        ></MessageCard>
+      </StyledLink>
+    </Block>
   )
 }
 
