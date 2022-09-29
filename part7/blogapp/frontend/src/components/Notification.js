@@ -7,8 +7,9 @@ const Notification = () => {
   if (notification === null) {
     return null
   }
+  console.log('type', notification.type)
 
-  const kind = notification.type === 'alert' ? KIND.alert : KIND.info
+  const kind = notification.type === 'alert' ? KIND.negative : KIND.info
 
   return (
     <BaseUiNotification
