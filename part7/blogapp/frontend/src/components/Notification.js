@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { Notification as BaseUiNotification, KIND } from 'baseui/notification'
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
@@ -7,20 +8,20 @@ const Notification = () => {
     return null
   }
 
-  const style = {
-    color: notification.type === 'alert' ? 'red' : 'green',
-    background: 'lightgrey',
-    fontSize: 20,
-    borderStyle: 'solid',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10
-  }
+  const kind = notification.type === 'alert' ? KIND.alert : KIND.info
 
   return (
-    <div id="notification" style={style}>
+    <BaseUiNotification
+      style
+      id="notification"
+      kind={kind}
+      overrides={{
+        Body: { style: { width: 'auto' } }
+      }}
+      closeable
+    >
       {notification.message}
-    </div>
+    </BaseUiNotification>
   )
 }
 
