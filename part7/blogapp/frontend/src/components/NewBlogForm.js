@@ -37,40 +37,40 @@ const NewBlogForm = ({ onCreate }) => {
     <div>
       <HeadingLevel>
         <Heading>Create new</Heading>
+
+        <form onSubmit={handleSubmit}>
+          <FormControl label="title">
+            <Input
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+              id="title"
+              placeholder="title of the blog"
+            />
+          </FormControl>
+
+          <FormControl label="author">
+            <Input
+              value={author}
+              onChange={({ target }) => setAuthor(target.value)}
+              id="author"
+              placeholder="author of the blog"
+            />
+          </FormControl>
+
+          <FormControl label="url">
+            <Input
+              value={url}
+              onChange={({ target }) => setUrl(target.value)}
+              id="url"
+              placeholder="url of the blog"
+            />
+          </FormControl>
+
+          <Button id="create-button" type="submit">
+            create
+          </Button>
+        </form>
       </HeadingLevel>
-
-      <form onSubmit={handleSubmit}>
-        <FormControl label="title">
-          <Input
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-            id="title"
-            placeholder="title of the blog"
-          />
-        </FormControl>
-
-        <FormControl label="author">
-          <Input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-            id="author"
-            placeholder="author of the blog"
-          />
-        </FormControl>
-
-        <FormControl label="url">
-          <Input
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-            id="url"
-            placeholder="url of the blog"
-          />
-        </FormControl>
-
-        <Button id="create-button" type="submit">
-          create
-        </Button>
-      </form>
     </div>
   )
 }

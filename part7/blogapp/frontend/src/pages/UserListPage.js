@@ -11,20 +11,20 @@ const UsersPage = () => {
     <div>
       <HeadingLevel>
         <Heading>Users</Heading>
-      </HeadingLevel>
 
-      <TableBuilder data={allUsers}>
-        <TableBuilderColumn>
-          {(user) => (
-            <StyledLink $as={Link} to={`/users/${user.id}`}>
-              {user.name}
-            </StyledLink>
-          )}
-        </TableBuilderColumn>
-        <TableBuilderColumn header="Blogs created" numeric>
-          {(user) => user.blogs.length}
-        </TableBuilderColumn>
-      </TableBuilder>
+        <TableBuilder data={allUsers}>
+          <TableBuilderColumn>
+            {(user) => (
+              <StyledLink $as={Link} to={`/users/${user.id}`}>
+                {user.name}
+              </StyledLink>
+            )}
+          </TableBuilderColumn>
+          <TableBuilderColumn header="Blogs created" numeric>
+            {(user) => user.blogs.length}
+          </TableBuilderColumn>
+        </TableBuilder>
+      </HeadingLevel>
     </div>
   )
 }

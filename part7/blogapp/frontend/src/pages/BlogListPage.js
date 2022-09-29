@@ -14,13 +14,13 @@ const BlogListPage = ({ blogs }) => {
     <div>
       <HeadingLevel>
         <Heading>Blogs</Heading>
+        <Togglable buttonLabel="create new" ref={blogFormRef}>
+          <NewBlogForm onCreate={createBlog} />
+        </Togglable>
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
       </HeadingLevel>
-      <Togglable buttonLabel="create new" ref={blogFormRef}>
-        <NewBlogForm onCreate={createBlog} />
-      </Togglable>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
     </div>
   )
 }

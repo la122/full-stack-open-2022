@@ -27,29 +27,29 @@ const LoginForm = () => {
     <div>
       <HeadingLevel>
         <Heading>Log in to application</Heading>
+
+        <form onSubmit={handleSubmit}>
+          <FormControl label="Username">
+            <Input
+              value={username}
+              onChange={({ target }) => setUsername(target.value)}
+              id="username"
+            />
+          </FormControl>
+
+          <FormControl label="Password">
+            <Input
+              type="password"
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+              id="password"
+            />
+          </FormControl>
+          <Button id="login-button" type="submit">
+            login
+          </Button>
+        </form>
       </HeadingLevel>
-
-      <form onSubmit={handleSubmit}>
-        <FormControl label="Username">
-          <Input
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            id="username"
-          />
-        </FormControl>
-
-        <FormControl label="Password">
-          <Input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            id="password"
-          />
-        </FormControl>
-        <Button id="login-button" type="submit">
-          login
-        </Button>
-      </form>
     </div>
   )
 }
