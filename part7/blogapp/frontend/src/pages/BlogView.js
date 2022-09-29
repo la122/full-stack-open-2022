@@ -1,8 +1,14 @@
+import { Block } from 'baseui/block'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { addComment, removeBlog, updateBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
+import { Card, StyledBody, StyledAction } from 'baseui/card'
+import { Button, SIZE } from 'baseui/button'
+import { ListHeading, ListItem } from 'baseui/list'
+import { FormControl } from 'baseui/form-control'
+import { Textarea } from 'baseui/textarea'
 
 const BlogView = ({ blog, own }) => {
   if (!blog) {
@@ -75,40 +81,54 @@ const BlogView = ({ blog, own }) => {
   }
 
   return (
-    <div>
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <div>
-        <a href={blog.url}>{blog.url}</a>
-      </div>
-      <div>
-        {blog.likes} likes <button onClick={onLike}>like</button>
-      </div>
-      added by {addedBy}
-      {own && <button onClick={onRemove}>remove</button>}
-      <div>
-        <h3>comments</h3>
+    <Block id="blogs" display="grid" justifyItems="center">
+      <Card title={blog.title + ' ' + blog.author}>
+        <StyledAction>
+          <a href={blog.url}>{blog.url}</a>
+        </StyledAction>
 
-        <form onSubmit={onAddComment}>
-          <input
+        <StyledAction>
+          {blog.likes} likes{' '}
+          <Button size={SIZE.compact} onClick={onLike}>
+            like
+          </Button>
+        </StyledAction>
+        <StyledBody>added by {addedBy}</StyledBody>
+        <StyledAction>
+          {own && (
+            <Button
+              overrides={{
+                BaseButton: { style: { width: '100%' } }
+              }}
+              onClick={onRemove}
+            >
+              remove
+            </Button>
+          )}
+        </StyledAction>
+      </Card>
+
+      <form onSubmit={onAddComment}>
+        <FormControl label="Leave a comment">
+          <Textarea
             id="commentInput"
             value={comment}
             onChange={({ target }) => setComment(target.value)}
           />
+        </FormControl>
+        <Button size={SIZE.compact} type="submit">
+          Add comment
+        </Button>
+      </form>
 
-          <button id="create-button" type="submit">
-            add comment
-          </button>
-        </form>
+      <ul>
+        <ListHeading heading="Comments" />
 
-        <ul>
-          {blog.comments?.map((comment, index) => (
-            <li key={index}>{comment}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
+        {blog.comments?.map((comment, index) => (
+          <ListItem key={index}>{comment}</ListItem>
+        ))}
+      </ul>
+    </Block>
   )
 }
 

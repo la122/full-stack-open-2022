@@ -7,7 +7,7 @@ import { initialBlogs } from './reducers/blogReducer'
 import UserListPage from './pages/UserListPage'
 import { initialUsers } from './reducers/allUsersReducer'
 import UserPage from './pages/UserPage'
-import BlogView from './components/BlogView'
+import BlogView from './pages/BlogView'
 import NavigationMenu from './components/NavigationMenu'
 import BlogListPage from './pages/BlogListPage'
 
