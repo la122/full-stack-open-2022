@@ -1,8 +1,8 @@
 import Blog from '../components/Blog'
-import { Block } from 'baseui/block'
 import Togglable from '../components/Togglable'
 import NewBlogForm from '../components/NewBlogForm'
 import { useRef } from 'react'
+import { Heading, HeadingLevel } from 'baseui/heading'
 
 const BlogListPage = ({ blogs }) => {
   const blogFormRef = useRef()
@@ -11,15 +11,17 @@ const BlogListPage = ({ blogs }) => {
     blogFormRef.current.toggleVisibility()
   }
   return (
-    <Block id="blogs" display="grid" justifyItems="center">
-      <h2>Blogs</h2>
+    <div>
+      <HeadingLevel>
+        <Heading>Blogs</Heading>
+      </HeadingLevel>
       <Togglable buttonLabel="create new" ref={blogFormRef}>
         <NewBlogForm onCreate={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-    </Block>
+    </div>
   )
 }
 

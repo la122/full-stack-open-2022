@@ -1,15 +1,18 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Block } from 'baseui/block'
 import { TableBuilder, TableBuilderColumn } from 'baseui/table-semantic'
 import { StyledLink } from 'baseui/link'
+import { Heading, HeadingLevel } from 'baseui/heading'
 
 const UsersPage = () => {
   const allUsers = useSelector((state) => state.allUsers)
 
   return (
-    <Block id="blogs" display="grid" justifyItems="center">
-      <h2>Users</h2>
+    <div>
+      <HeadingLevel>
+        <Heading>Users</Heading>
+      </HeadingLevel>
+
       <TableBuilder data={allUsers}>
         <TableBuilderColumn>
           {(user) => (
@@ -22,7 +25,7 @@ const UsersPage = () => {
           {(user) => user.blogs.length}
         </TableBuilderColumn>
       </TableBuilder>
-    </Block>
+    </div>
   )
 }
 

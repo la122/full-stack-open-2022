@@ -1,5 +1,6 @@
 import { Button } from 'baseui/button'
 import { FormControl } from 'baseui/form-control'
+import { Heading, HeadingLevel } from 'baseui/heading'
 import { Input } from 'baseui/input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -34,7 +35,9 @@ const NewBlogForm = ({ onCreate }) => {
 
   return (
     <div>
-      <h2>Create new</h2>
+      <HeadingLevel>
+        <Heading>Create new</Heading>
+      </HeadingLevel>
 
       <form onSubmit={handleSubmit}>
         <FormControl label="title">

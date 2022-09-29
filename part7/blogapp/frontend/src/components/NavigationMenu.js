@@ -10,6 +10,7 @@ import {
 import { StyledLink } from 'baseui/link'
 import { Button, SHAPE, SIZE } from 'baseui/button'
 import { Link } from 'react-router-dom'
+
 const NavigationMenu = ({ user }) => {
   const dispatch = useDispatch()
 

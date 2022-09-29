@@ -5,7 +5,6 @@ import { createNotification } from '../reducers/notificationReducer'
 import { FormControl } from 'baseui/form-control'
 import { Input } from 'baseui/input'
 import { Button } from 'baseui/button'
-import { Block } from 'baseui/block'
 import { Heading, HeadingLevel } from 'baseui/heading'
 
 const LoginForm = () => {
@@ -25,7 +24,7 @@ const LoginForm = () => {
   }
 
   return (
-    <Block id="blogs" display="grid" justifyItems="center">
+    <div>
       <HeadingLevel>
         <Heading>Log in to application</Heading>
       </HeadingLevel>
@@ -51,7 +50,7 @@ const LoginForm = () => {
           login
         </Button>
       </form>
-    </Block>
+    </div>
   )
 }
 

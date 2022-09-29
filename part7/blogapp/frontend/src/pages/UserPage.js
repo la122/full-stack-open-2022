@@ -1,4 +1,3 @@
-import { Block } from 'baseui/block'
 import { Link } from 'react-router-dom'
 import { ListItem, ListHeading } from 'baseui/list'
 
@@ -10,7 +9,7 @@ const UserPage = ({ user }) => {
   }
 
   return (
-    <Block id="blogs" display="grid" justifyItems="center">
+    <div>
       <ul>
         <ListHeading heading={user.name} subHeading="Added blogs" />
 
@@ -22,7 +21,7 @@ const UserPage = ({ user }) => {
           </ListItem>
         ))}
       </ul>
-    </Block>
+    </div>
   )
 }
 

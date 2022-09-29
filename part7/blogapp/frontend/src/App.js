@@ -10,6 +10,28 @@ import UserPage from './pages/UserPage'
 import BlogView from './pages/BlogView'
 import NavigationMenu from './components/NavigationMenu'
 import BlogListPage from './pages/BlogListPage'
+import { Cell, Grid } from 'baseui/layout-grid'
+import { useStyletron } from 'baseui'
+
+const PageContent = ({ children }) => {
+  const [css] = useStyletron()
+
+  return (
+    <Grid>
+      <Cell skip={[0, 1, 2]} span={[4, 6, 8]}>
+        <div
+          className={css({
+            display: 'grow',
+            justifyContent: 'center',
+            alignItems: 'center'
+          })}
+        >
+          {children}
+        </div>
+      </Cell>
+    </Grid>
+  )
+}
 
 const App = () => {
   const dispatch = useDispatch()
@@ -42,36 +64,37 @@ const App = () => {
 
   if (user === null) {
     return (
-      <>
+      <PageContent>
         <Notification />
         <LoginForm />
-      </>
+      </PageContent>
     )
   }
 
   return (
     <div>
       <NavigationMenu user={user} />
+      <PageContent>
+        <Notification />
+        <Routes>
+          <Route path="/users/:id" element={<UserPage user={userToShow} />} />
+          <Route
+            path="/blogs/:id"
+            element={
+              <BlogView
+                blog={blogToShow}
+                own={
+                  blogToShow?.user && user.username === blogToShow.user.username
+                }
+              />
+            }
+          />
 
-      <Notification />
-      <Routes>
-        <Route path="/users/:id" element={<UserPage user={userToShow} />} />
-        <Route
-          path="/blogs/:id"
-          element={
-            <BlogView
-              blog={blogToShow}
-              own={
-                blogToShow?.user && user.username === blogToShow.user.username
-              }
-            />
-          }
-        />
+          <Route path="/" element={<BlogListPage blogs={blogs} />} />
 
-        <Route path="/" element={<BlogListPage blogs={blogs} />} />
-
-        <Route path="/users" element={<UserListPage />} />
-      </Routes>
+          <Route path="/users" element={<UserListPage />} />
+        </Routes>
+      </PageContent>
     </div>
   )
 }

@@ -1,4 +1,3 @@
-import { Block } from 'baseui/block'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -81,7 +80,7 @@ const BlogView = ({ blog, own }) => {
   }
 
   return (
-    <Block id="blogs" display="grid" justifyItems="center">
+    <div>
       <Card title={blog.title + ' ' + blog.author}>
         <StyledAction>
           <a href={blog.url}>{blog.url}</a>
@@ -128,7 +127,7 @@ const BlogView = ({ blog, own }) => {
           <ListItem key={index}>{comment}</ListItem>
         ))}
       </ul>
-    </Block>
+    </div>
   )
 }
 
