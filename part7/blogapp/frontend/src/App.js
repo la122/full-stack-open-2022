@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import { initialBlogs } from './reducers/blogReducer'
-import AllUsers from './components/AllUsers'
+import UsersPage from './pages/UsersPage'
 import { initialUsers } from './reducers/allUsersReducer'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
@@ -70,15 +70,7 @@ const App = () => {
 
         <Route path="/" element={<BlogsPage blogs={blogs} />} />
 
-        <Route
-          path="/users"
-          element={
-            <>
-              <h2>users</h2>
-              <AllUsers />
-            </>
-          }
-        />
+        <Route path="/users" element={<UsersPage />} />
       </Routes>
     </div>
   )
