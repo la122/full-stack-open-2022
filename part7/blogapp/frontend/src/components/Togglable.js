@@ -1,4 +1,4 @@
-import { Button } from 'baseui/button'
+import { Button, KIND } from 'baseui/button'
 import { useState, useImperativeHandle, forwardRef } from 'react'
 
 const Togglable = forwardRef((props, ref) => {
@@ -24,7 +24,9 @@ const Togglable = forwardRef((props, ref) => {
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <Button onClick={toggleVisibility}>cancel</Button>
+        <Button kind={KIND.tertiary} onClick={toggleVisibility}>
+          cancel
+        </Button>
       </div>
     </div>
   )
