@@ -161,7 +161,7 @@ const resolvers = {
       return savedBook.populate('author')
     },
 
-    editAuthor: async (root, { name, setBornTo }) => {
+    editAuthor: async (root, { name, setBornTo }, { currentUser }) => {
       if (!currentUser) {
         throw new AuthenticationError('not authenticated')
       }
@@ -171,6 +171,10 @@ const resolvers = {
       if (authorFound) {
         authorFound.born = setBornTo
         const authorSaved = await authorFound.save()
+
+        const books = await Book.find({ author: authorSaved.id })
+        authorSaved.bookCount = books.length
+
         return authorSaved
       }
 
