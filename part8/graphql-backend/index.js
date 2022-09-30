@@ -110,7 +110,7 @@ const resolvers = {
         ...(genre && { genres: { $in: [genre] } })
       }
 
-      const books = await Book.find(filter)
+      const books = await Book.find(filter).populate('author')
 
       console.log('books found', books)
 
