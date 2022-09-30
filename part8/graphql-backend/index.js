@@ -117,7 +117,17 @@ const resolvers = {
       return books
     },
 
-    allAuthors: async () => await Author.find()
+    allAuthors: async () => {
+      const authors = await Author.find()
+
+      for (const author of authors) {
+        const books = await Book.find({ author: author.id })
+        author.bookCount = books.length
+        console.log(author.bookCount)
+      }
+
+      return authors
+    }
   },
 
   Mutation: {
