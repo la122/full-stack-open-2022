@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 require('dotenv').config()
@@ -72,7 +72,9 @@ const resolvers = {
         authorFound = await Author.findOne({ name: author })
         console.log('author found', authorFound)
         if (!authorFound) {
-          return null
+          throw new UserInputError('Author not found', {
+            invalidArgs: author
+          })
         }
       }
 
@@ -117,7 +119,11 @@ const resolvers = {
         const authorSaved = await authorFound.save()
         return authorSaved
       }
-      console.log('Author not found', name)
+      if (!authorFound) {
+        throw new UserInputError('Author not found', {
+          invalidArgs: name
+        })
+      }
     }
   }
 }
