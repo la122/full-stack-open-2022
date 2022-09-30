@@ -18,7 +18,7 @@ const Recommend = ({ show, genre }) => {
     <div>
       <h2>Recomendations</h2>
       <p>
-        Books in your favorite genre <b>patterns</b>
+        Books in your favorite genre <b>{genre}</b>
       </p>
       <table>
         <tbody>
