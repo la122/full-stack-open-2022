@@ -1,10 +1,9 @@
 import { useQuery } from '@apollo/client'
-import { useState } from 'react'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
-  const [filter, setFilter] = useState(null)
+  const { data } = useQuery(ALL_BOOKS)
+  const { loading, data: dataFiltered, refetch } = useQuery(ALL_BOOKS)
 
   console.log('render...')
 
@@ -12,17 +11,13 @@ const Books = (props) => {
     return null
   }
 
-  if (result.loading) {
+  if (loading) {
     return <div>loading...</div>
   }
 
-  let books = result.data.allBooks
-  if (filter) {
-    books = books.filter((book) => book.genres.includes(filter))
-  }
-
-  let genres = result.data.allBooks.map((book) => book.genres).flat()
+  let genres = data.allBooks.map((book) => book.genres).flat()
   genres = [...new Set(genres)]
+  const books = dataFiltered.allBooks
 
   return (
     <div>
@@ -44,12 +39,14 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+
       {genres.map((genre) => (
-        <button key={genre} onClick={() => setFilter(genre)}>
+        <button key={genre} onClick={() => refetch({ genre })}>
           {genre}
         </button>
       ))}
-      <button onClick={() => setFilter(null)}>all</button>
+
+      <button onClick={() => refetch({ genre: undefined })}>all</button>
     </div>
   )
 }
