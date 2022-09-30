@@ -1,8 +1,12 @@
 import { useQuery } from '@apollo/client'
+import { useState } from 'react'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
+  const [filter, setFilter] = useState(null)
+
+  console.log('render...')
 
   if (!props.show) {
     return null
@@ -12,7 +16,13 @@ const Books = (props) => {
     return <div>loading...</div>
   }
 
-  const books = result.data.allBooks
+  let books = result.data.allBooks
+  if (filter) {
+    books = books.filter((book) => book.genres.includes(filter))
+  }
+
+  let genres = result.data.allBooks.map((book) => book.genres).flat()
+  genres = [...new Set(genres)]
 
   return (
     <div>
@@ -34,6 +44,12 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+      {genres.map((genre) => (
+        <button key={genre} onClick={() => setFilter(genre)}>
+          {genre}
+        </button>
+      ))}
+      <button onClick={() => setFilter(null)}>all</button>
     </div>
   )
 }
