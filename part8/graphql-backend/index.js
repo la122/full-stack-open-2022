@@ -76,7 +76,6 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     me: async (root, args, { currentUser }) => {
-      console.log(currentUser)
       return currentUser
     },
 
@@ -95,7 +94,6 @@ const resolvers = {
 
       if (author) {
         authorFound = await Author.findOne({ name: author })
-        console.log('author found', authorFound)
         if (!authorFound) {
           throw new UserInputError('Author not found', {
             invalidArgs: author
@@ -103,16 +101,12 @@ const resolvers = {
         }
       }
 
-      console.log('in genre', genre)
-
       const filter = {
         ...(author && { author: authorFound.id }),
         ...(genre && { genres: { $in: [genre] } })
       }
 
       const books = await Book.find(filter).populate('author')
-
-      console.log('books found', books)
 
       return books
     },
@@ -123,7 +117,6 @@ const resolvers = {
       for (const author of authors) {
         const books = await Book.find({ author: author.id })
         author.bookCount = books.length
-        console.log(author.bookCount)
       }
 
       return authors
@@ -160,14 +153,12 @@ const resolvers = {
 
       if (!author) {
         author = new Author({ name: args.author })
-        console.log('Adding author', author)
         await author.save()
       }
 
       const newBook = new Book({ ...args, author: author.id })
-      console.log('Adding book', newBook)
       const savedBook = await newBook.save()
-      return savedBook.populate('author', { name: 1, born: 1 })
+      return savedBook.populate('author')
     },
 
     editAuthor: async (root, { name, setBornTo }) => {
@@ -176,17 +167,16 @@ const resolvers = {
       }
 
       const authorFound = await Author.findOne({ name })
+
       if (authorFound) {
-        console.log('Author found', authorFound)
         authorFound.born = setBornTo
         const authorSaved = await authorFound.save()
         return authorSaved
       }
-      if (!authorFound) {
-        throw new UserInputError('Author not found', {
-          invalidArgs: name
-        })
-      }
+
+      throw new UserInputError('Author not found', {
+        invalidArgs: name
+      })
     }
   }
 }
@@ -200,7 +190,6 @@ const server = new ApolloServer({
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
-      console.log('current user', currentUser)
       return { currentUser }
     }
   }
