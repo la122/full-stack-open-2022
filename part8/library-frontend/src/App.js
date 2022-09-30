@@ -31,6 +31,7 @@ const App = () => {
     onSubscriptionData: ({ subscriptionData }) => {
       console.log(subscriptionData)
       window.alert(`book added ${subscriptionData.data.bookAdded.title}`)
+      client.refetchQueries({ include: 'active' })
     }
   })
 
