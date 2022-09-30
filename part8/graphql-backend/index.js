@@ -65,15 +65,29 @@ const resolvers = {
       return authors.length
     },
 
-    // TODO
     allBooks: async (root, { author, genre }) => {
-      // books.filter(
-      //   (book) =>
-      //     (author ? book.author === author : true) &&
-      //     (genre ? book.genres.includes(genre) : true)
-      // ),
+      let authorFound = undefined
 
-      return await Book.find({})
+      if (author) {
+        authorFound = await Author.findOne({ name: author })
+        console.log('author found', authorFound)
+        if (!authorFound) {
+          return null
+        }
+      }
+
+      console.log('in genre', genre)
+
+      const filter = {
+        ...(author && { author: authorFound.id }),
+        ...(genre && { genres: { $in: [genre] } })
+      }
+
+      const books = await Book.find(filter)
+
+      console.log('books found', books)
+
+      return books
     },
 
     allAuthors: async () => await Author.find()
@@ -81,30 +95,29 @@ const resolvers = {
 
   Mutation: {
     addBook: async (root, args) => {
-      // let author = await Author.find({ name: args.author })
-      // if (!author) {
-      //   author = new Author(args.author)
-      //   author.save()
-      // }
+      let author = await Author.findOne({ name: args.author })
 
-      const newBook = new Book({ ...args, author: null })
+      if (!author) {
+        author = new Author({ name: args.author })
+        console.log('Adding author', author)
+        await author.save()
+      }
+
+      const newBook = new Book({ ...args, author: author.id })
       console.log('Adding book', newBook)
-
-      // author.books = author.books.concat(newBook)
-
-      return newBook.save()
+      const savedBook = await newBook.save()
+      return savedBook.populate('author', { name: 1, born: 1 })
     },
 
-    // TODO
-    editAuthor: (root, { name, setBornTo }) => {
-      const authorFound = authors.find((a) => a.name === name)
+    editAuthor: async (root, { name, setBornTo }) => {
+      const authorFound = await Author.findOne({ name })
       if (authorFound) {
+        console.log('Author found', authorFound)
         authorFound.born = setBornTo
-        return {
-          ...authorFound,
-          bookCount: books.filter((book) => name === book.author).length
-        }
+        const authorSaved = await authorFound.save()
+        return authorSaved
       }
+      console.log('Author not found', name)
     }
   }
 }
