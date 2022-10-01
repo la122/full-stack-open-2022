@@ -45,12 +45,14 @@ const parseArguments = (args: Array<string>): BmiArgs => {
   return { height, weight };
 };
 
-try {
-  console.log(calculateBmi(parseArguments(process.argv)));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (process.argv.length > 2) {
+  try {
+    console.log(calculateBmi(parseArguments(process.argv)));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
