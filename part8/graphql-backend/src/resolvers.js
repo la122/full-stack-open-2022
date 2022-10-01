@@ -49,12 +49,6 @@ const resolvers = {
 
     allAuthors: async () => {
       const authors = await Author.find()
-
-      for (const author of authors) {
-        const books = await Book.find({ author: author.id })
-        author.bookCount = books.length
-      }
-
       return authors
     }
   },
@@ -96,6 +90,9 @@ const resolvers = {
       const savedBook = await newBook.save()
       await savedBook.populate('author')
 
+      author.bookCount++
+      await author.save()
+
       pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
 
       return savedBook
@@ -111,10 +108,6 @@ const resolvers = {
       if (authorFound) {
         authorFound.born = setBornTo
         const authorSaved = await authorFound.save()
-
-        const books = await Book.find({ author: authorSaved.id })
-        authorSaved.bookCount = books.length
-
         return authorSaved
       }
 
