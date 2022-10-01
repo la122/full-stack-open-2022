@@ -1,12 +1,15 @@
 import patientData from "../../data/patients.json";
 import { Patient, NonSensitivePatient, NewPatient } from "../types";
 import { v1 as uuid } from "uuid";
+import { parseGender } from "../utils";
 
-const patients: Patient[] = patientData;
+const patients: Array<Patient> = patientData.map((p) => ({
+  ...p,
+  gender: parseGender(p.gender),
+}));
 
 const getNonSensitiveEntries = (): NonSensitivePatient[] => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return patients.map(({ ssn, ...rest }) => rest);
+  return patients.map(({ ssn: _omitted, ...rest }) => rest);
 };
 
 const addPatient = (newPatient: NewPatient) => {
