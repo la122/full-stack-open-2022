@@ -81,12 +81,14 @@ const parseArguments = (args: Array<string>): ExercisesArgs => {
   return { targetAmount, dailyExerciseHours };
 };
 
-try {
-  console.log(calculateExercises(parseArguments(process.argv)));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (process.argv.length > 2) {
+  try {
+    console.log(calculateExercises(parseArguments(process.argv)));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
