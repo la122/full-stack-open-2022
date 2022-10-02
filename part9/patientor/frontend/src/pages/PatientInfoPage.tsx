@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
-import { useStateValue } from "../state";
+import { addPatient, useStateValue } from "../state";
 import { Gender, Patient } from "../types";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FemaleIcon from "@mui/icons-material/Female";
@@ -36,7 +36,7 @@ const PatientInfoPage = () => {
           `${apiBaseUrl}/patients/${id}`
         );
         console.log("fetchted", data);
-        dispatch({ type: "ADD_PATIENT", payload: data });
+        dispatch(addPatient(data));
       } catch (e) {
         console.error(e);
       }
