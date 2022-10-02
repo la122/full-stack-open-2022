@@ -9,6 +9,15 @@ router.get("/", (_req, res) => {
   res.send(patentService.getNonSensitiveEntries());
 });
 
+router.get("/:id", (req, res) => {
+  const patient = patentService.getPatient(req.params.id);
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.status(400).send("patient not found");
+  }
+});
+
 router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatient(req.body);
