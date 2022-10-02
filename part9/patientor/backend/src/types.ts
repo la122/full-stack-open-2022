@@ -20,12 +20,18 @@ export type Patient = {
   entries: Entry[];
 };
 
+interface Diagnosis {
+  code: string;
+  name: string;
+  latin: string;
+}
+
 interface BaseEntry {
   id: string;
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 interface HealthCheckEntry extends BaseEntry {

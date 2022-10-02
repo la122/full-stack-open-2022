@@ -1,9 +1,3 @@
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}
-
 export enum Gender {
   Male = "male",
   Female = "female",
@@ -20,12 +14,18 @@ export interface Patient {
   entries: Entry[];
 }
 
+export interface Diagnosis {
+  code: string;
+  name: string;
+  latin: string;
+}
+
 interface BaseEntry {
   id: string;
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 interface HealthCheckEntry extends BaseEntry {
