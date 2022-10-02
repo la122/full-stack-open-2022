@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { addPatient, useStateValue } from "../state";
-import { Gender, Patient } from "../types";
+import { Entry, Gender, Patient } from "../types";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FemaleIcon from "@mui/icons-material/Female";
 import ManIcon from "@mui/icons-material/Man";
@@ -17,6 +17,21 @@ const GenderIcon = ({ gender }: { gender: Gender }) => {
   }
   return <TransgenderIcon />;
 };
+
+const Entries = ({ entries }: { entries: Entry[] }) => (
+  <div>
+    {entries.map((entry) => (
+      <div key={entry.id}>
+        {entry.date} <i>{entry.description}</i>
+        <ul>
+          {entry.diagnosisCodes?.map((code) => (
+            <li key={code}>{code}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+);
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -57,6 +72,9 @@ const PatientInfoPage = () => {
         <div>Occupation: {patient.occupation}</div>
         <div>Gender: {patient.gender}</div>
         <div>Born: {patient.dateOfBirth}</div>
+
+        <h3>Entries</h3>
+        <Entries entries={patient.entries} />
       </div>
     )
   );
