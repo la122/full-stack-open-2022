@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { addPatient, useStateValue } from "../state";
-import { Entry, Gender, Patient } from "../types";
+import { Diagnosis, Entry, Gender, Patient } from "../types";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FemaleIcon from "@mui/icons-material/Female";
 import ManIcon from "@mui/icons-material/Man";
@@ -18,22 +18,34 @@ const GenderIcon = ({ gender }: { gender: Gender }) => {
   return <TransgenderIcon />;
 };
 
-const Entries = ({ entries }: { entries: Entry[] }) => (
-  <div>
-    {entries.map((entry) => (
-      <div key={entry.id}>
-        {entry.date} <i>{entry.description}</i>
-        <ul>
-          {entry.diagnosisCodes?.map((code) => (
-            <li key={code}>{code}</li>
-          ))}
-        </ul>
-      </div>
-    ))}
-  </div>
-);
+const Entries = ({
+  entries,
+  diagnoses,
+}: {
+  entries: Entry[];
+  diagnoses: Diagnosis[];
+}) => {
+  const description = (code: string) =>
+    diagnoses.find((d) => d.code === code)?.name;
 
-const PatientInfoPage = () => {
+  return (
+    <div>
+      {entries.map((entry) => (
+        <div key={entry.id}>
+          {entry.date} <i>{entry.description}</i>
+          <ul>
+            {entry.diagnosisCodes?.map((code) => (
+              <li key={code}>
+                {code} {description(code)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+};
+const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
 
@@ -74,7 +86,7 @@ const PatientInfoPage = () => {
         <div>Born: {patient.dateOfBirth}</div>
 
         <h3>Entries</h3>
-        <Entries entries={patient.entries} />
+        <Entries entries={patient.entries} diagnoses={diagnoses} />
       </div>
     )
   );
