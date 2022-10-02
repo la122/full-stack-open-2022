@@ -3,49 +3,51 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { addPatient, useStateValue } from "../state";
-import { Diagnosis, Entry, Gender, Patient } from "../types";
+import { Entry, Gender, Patient } from "../types";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FemaleIcon from "@mui/icons-material/Female";
-import ManIcon from "@mui/icons-material/Man";
+import MaleIcon from "@mui/icons-material/Male";
+import EntryDetails from "../components/EntryDetails";
+import { Box } from "@material-ui/core";
 
 const GenderIcon = ({ gender }: { gender: Gender }) => {
   if (gender == Gender.Female) {
     return <FemaleIcon />;
   }
   if (gender == Gender.Male) {
-    return <ManIcon />;
+    return <MaleIcon />;
   }
   return <TransgenderIcon />;
 };
 
-const Entries = ({
-  entries,
-  diagnoses,
-}: {
-  entries: Entry[];
-  diagnoses: Diagnosis[];
-}) => {
-  const description = (code: string) =>
-    diagnoses.find((d) => d.code === code)?.name;
-
+const Entries = ({ entries }: { entries: Entry[] }) => {
+  const [{ diagnoses }] = useStateValue();
+  console.log(diagnoses);
   return (
-    <div>
+    <Box
+      sx={{
+        display: "grid",
+        gridGap: 3,
+      }}
+    >
       {entries.map((entry) => (
-        <div key={entry.id}>
-          {entry.date} <i>{entry.description}</i>
+        <Box key={entry.id} border={2} borderRadius="borderRadius">
+          <EntryDetails entry={entry} />
           <ul>
             {entry.diagnosisCodes?.map((code) => (
               <li key={code}>
-                {code} {description(code)}
+                {code} - <i>{diagnoses[code].name}</i>
               </li>
             ))}
           </ul>
-        </div>
+          <div>diagnose by {entry.specialist}</div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
-const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
+
+const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
 
@@ -62,7 +64,7 @@ const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
         const { data } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        console.log("fetchted", data);
+
         dispatch(addPatient(data));
       } catch (e) {
         console.error(e);
@@ -84,9 +86,8 @@ const PatientInfoPage = ({ diagnoses }: { diagnoses: Diagnosis[] }) => {
         <div>Occupation: {patient.occupation}</div>
         <div>Gender: {patient.gender}</div>
         <div>Born: {patient.dateOfBirth}</div>
-
         <h3>Entries</h3>
-        <Entries entries={patient.entries} diagnoses={diagnoses} />
+        <Entries entries={patient.entries} />
       </div>
     )
   );
