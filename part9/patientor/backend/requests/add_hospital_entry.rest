@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries HTTP/1.1
+content-type: application/json
+
+{
+    "type": "Hospital",
+    "discharge": {"date": "2019-10-20", "criteria": "diagnoses codes are optional" },
+    "description": "testing hospital entry",
+    "date": "2019-10-20",
+    "specialist": "dev",
+    "diagnosisCodes": ["Z57.1", "Z74.3", "M51.2"]
+}

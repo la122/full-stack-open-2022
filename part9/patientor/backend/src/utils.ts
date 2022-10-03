@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from "./types";
+import { Gender, NewEntry, NewPatient } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -58,4 +58,52 @@ export const toNewPatient = (object: unknown): NewPatient => {
     gender: parseGender(patient.gender),
     occupation: parseOccupation(patient.occupation),
   };
+};
+
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+export const isNewEntry = (object: unknown): object is NewEntry => {
+  if (!(typeof object === "object" && object !== null)) {
+    return false;
+  }
+
+  const hospitaKeys = [
+    "date",
+    "description",
+    "discharge",
+    "specialist",
+    "type",
+  ];
+
+  const healthCheckKeys = [
+    "date",
+    "description",
+    "healthCheckRating",
+    "specialist",
+    "type",
+  ];
+
+  const occupationalKeys = [
+    "date",
+    "description",
+    "employerName",
+    "specialist",
+    "type",
+  ];
+
+  const optionalKeys = ["diagnosisCodes", "sickLeave"];
+
+  const objectKeys = Object.keys(object)
+    .filter((k) => !optionalKeys.includes(k))
+    .sort();
+
+  return (
+    JSON.stringify(objectKeys) === JSON.stringify(hospitaKeys) ||
+    JSON.stringify(objectKeys) === JSON.stringify(healthCheckKeys) ||
+    JSON.stringify(objectKeys) === JSON.stringify(occupationalKeys)
+  );
 };

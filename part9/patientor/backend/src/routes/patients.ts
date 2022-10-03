@@ -1,7 +1,8 @@
 import express from "express";
 import patientService from "../services/patientService";
 import patentService from "../services/patientService";
-import { toNewPatient } from "../utils";
+import { NewEntry } from "../types";
+import { isNewEntry, toNewPatient } from "../utils";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.get("/:id", (req, res) => {
   if (patient) {
     res.send(patient);
   } else {
-    res.status(400).send("patient not found");
+    res.status(404).send("Patient not found.");
   }
 });
 
@@ -29,6 +30,31 @@ router.post("/", (req, res) => {
       errorMessage += " Error: " + error.message;
     }
     res.status(400).send(errorMessage);
+  }
+});
+
+router.post("/:id/entries", (req, res) => {
+  const patient = patentService.getPatient(req.params.id);
+
+  if (!patient) {
+    return res.status(404).send("Patient not found.");
+  }
+
+  const entry = req.body as NewEntry;
+
+  if (!isNewEntry(entry)) {
+    return res.status(400).send("Incorrect or missing attribute.");
+  }
+
+  try {
+    const addedEntry = patientService.addEntry(patient, entry);
+    return res.json(addedEntry);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    return res.status(400).send(errorMessage);
   }
 });
 
