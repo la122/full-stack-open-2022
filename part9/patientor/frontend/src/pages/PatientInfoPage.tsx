@@ -9,6 +9,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import EntryDetails from "../components/EntryDetails";
 import { Box } from "@material-ui/core";
+import AddEntryForm from "../components/AddEntryForm";
 
 const GenderIcon = ({ gender }: { gender: Gender }) => {
   if (gender == Gender.Female) {
@@ -22,7 +23,7 @@ const GenderIcon = ({ gender }: { gender: Gender }) => {
 
 const Entries = ({ entries }: { entries: Entry[] }) => {
   const [{ diagnoses }] = useStateValue();
-  console.log(diagnoses);
+
   return (
     <Box
       sx={{
@@ -30,8 +31,15 @@ const Entries = ({ entries }: { entries: Entry[] }) => {
         gridGap: 3,
       }}
     >
+      <AddEntryForm />
+
       {entries.map((entry) => (
-        <Box key={entry.id} border={2} borderRadius="borderRadius">
+        <Box
+          key={entry.id}
+          border="2px solid grey"
+          borderRadius="borderRadius"
+          sx={{ p: 2 }}
+        >
           <EntryDetails entry={entry} />
           <ul>
             {entry.diagnosisCodes?.map((code) => (

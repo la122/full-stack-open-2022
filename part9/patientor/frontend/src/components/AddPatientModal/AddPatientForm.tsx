@@ -1,9 +1,8 @@
-import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectField, GenderOption } from "./FormField";
-import { Gender, Patient } from "../types";
+import { TextField, SelectField, SelectOption } from "../FormField";
+import { Gender, Patient } from "../../types";
 
 /*
  * use type Patient, but omit id and entries,
@@ -16,7 +15,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const genderOptions: GenderOption[] = [
+const genderOptions: SelectOption[] = [
   { value: Gender.Male, label: "Male" },
   { value: Gender.Female, label: "Female" },
   { value: Gender.Other, label: "Other" },

@@ -7,7 +7,7 @@ import { apiBaseUrl } from "./constants";
 import { setDiagnosisList, setPatientList, useStateValue } from "./state";
 import { Diagnosis, Patient } from "./types";
 
-import PatientListPage from "./PatientListPage";
+import PatientListPage from "./pages/PatientListPage";
 import { Typography } from "@material-ui/core";
 import PatientInfoPage from "./pages/PatientInfoPage";
 
